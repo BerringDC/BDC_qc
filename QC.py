@@ -23,15 +23,20 @@ class QC(object):
     def regions(self, vessel, d):
         self.df['flag_vessel_region'] = 1
         region = 'Unknown'
-        if -60 <= self.df['LONGITUDE'] <= -15 and 55 <= self.df['LATITUDE'] <= 90:
+        max_lat = self.df['LATITUDE'].max()
+        min_lat = self.df['LATITUDE'].min()
+        max_lon = self.df['LONGITUDE'].max()
+        min_lon = self.df['LONGITUDE'].min()
+
+        if -60 <= max_lon <= -15 and 55 <= max_lat <= 90 and -60 <= min_lon <= -15 and 55 <= min_lat <= 90:
             region = 'Greenland'
-        elif -15 <= self.df['LONGITUDE'] <= 30 and 45 <= self.df['LATITUDE'] <= 60:
+        elif -15 <= max_lon <= 30 and 45 <= max_lat <= 60 and -15 <= min_lon <= 30 and 45 <= min_lat:
             region = 'North Sea'
-        elif -75 <= self.df['LONGITUDE'] <= 30 and 55 <= self.df['LATITUDE'] <= 90:
+        elif -75 <= max_lon <= 30 and 55 <= max_lat <= 90 and -75 <= min_lon <= 30 and 55 <= min_lat <= 90:
             region = 'Atlantic'
-        elif (160 <= self.df['LONGITUDE'] <= 180 or 0 <= self.df['LONGITUDE'] <= 5) and -50 <= self.df['LATITUDE'] <= -30:
+        elif (160 <= max_lon <= 180 or 0 <= max_lon <= 5) and -50 <= max_lat <= -30 and (160 <= min_lon <= 180 or 0 <= min_lon <= 5) and -50 <= min_lat <= -30:
             region = 'New Zeland'
-        elif -180 <= self.df['LONGITUDE'] <= -125 and 45 <= self.df['LATITUDE'] <= 90:
+        elif -180 <= max_lon <= -125 and 45 <= max_lat <= 90 and -180 <= min_lon <= -125 and 45 <= min_lat <= 90:
             region = 'Alaska'
 
         if d[vessel] != region:
@@ -70,7 +75,7 @@ class QC(object):
         currdate = datetime.utcnow()
         tim_inc = 24  # hours
         time_gap = currdate - self.df['DATETIME'].iloc[-1]
-        if time_gap > tim_inc:
+        if time_gap.total_seconds()/3600 > tim_inc:
             self.df['flag_timing_gap'] = 3
 
 
@@ -177,7 +182,7 @@ class QC(object):
         self.df['post_temp_1'] = self.df['TEMPERATURE'].shift(-1)
         self.df['post_temp_2'] = self.df['TEMPERATURE'].shift(-2)
         self.parse_segments()
-        self.df.loc[((self.df['prev_temp_1'] == self.df['TEMPERATURE']) & (self.df['post_temp_!'] == self.df['TEMPERATURE']) & (self.df['type'] != 3)), 'flag_temp_stuck'] = 3
+        self.df.loc[((self.df['prev_temp_1'] == self.df['TEMPERATURE']) & (self.df['post_temp_1'] == self.df['TEMPERATURE']) & (self.df['type'] != 3)), 'flag_temp_stuck'] = 3
         self.df.loc[((self.df['prev_temp_1'] == self.df['TEMPERATURE']) & (
                 self.df['post_temp_1'] == self.df['TEMPERATURE']) & (
                                  self.df['prev_temp_2'] == self.df['TEMPERATURE']) & (
