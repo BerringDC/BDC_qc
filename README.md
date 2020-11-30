@@ -13,55 +13,53 @@ November 2020
 
 ## Table of contents
 
-[Table of contents](#_Toc57626994)
+* [Introduction](#_Toc57626995)
 
-[1. Introduction](#_Toc57626995)
+* [Flags](#_Toc57626996)
 
-[2. Flags](#_Toc57626996)
+* [Real-time Quality control](#_Toc57626997)
 
-[3. Real-time Quality control](#_Toc57626997)
+	* [Fisheries quality control tests](#_Toc57626998)
 
-[3.1. Fisheries quality control tests](#_Toc57626998)
+		* [Platform identification (under development)](#_Toc57626999)
 
-[1. Platform identification (under development)](#_Toc57626999)
+		* [Vessel ID control (under development)](#_Toc57627000)
 
-[2. Vessel ID control (under development)](#_Toc57627000)
+		* [Gear type control (under development)](#_Toc57627001)
 
-[3. Gear type control (under development)](#_Toc57627001)
+	* [Quality control tests CTD](#_Toc57627002)
 
-[3.2. Quality control tests CTD](#_Toc57627002)
+		* [Impossible date test](#_Toc57627003)
+		 
+		* [Impossible location test](#_Toc57627004)
+		 
+		* [Position on land test](#_Toc57627005)
+		 
+		* [Impossible speed test (MOBILE GEAR)](#_Toc57627006)
+		 
+		* [Global range test](#_Toc57627007)
+		 
+		* [Spike test](#_Toc57627008)
+		 
+		* [Digit rollover test](#_Toc57627009)
+		 
+		* [Stuck value/ flat line test](#_Toc57627010)
+		 
+		* [Rate of change test](#_Toc57627011)
+		 
+		* [Timing/gap test](#_Toc57627012)
+		 
+		* [Climatology test](#_Toc57627013)
+		
+		* [Drift test (under development)](#_Toc57627014)
 
-[4. Impossible date test](#_Toc57627003)
+	* [Quality control tests oxygen/turbidity (under development)](#_Toc57627015)
 
-[5. Impossible location test](#_Toc57627004)
+* [Delayed-mode quality control (under development)](#_Toc57627016)
 
-[6. Position on land test](#_Toc57627005)
+* [Quality control tests (under development)](#_Toc57627017)
 
-[7. Impossible speed test (MOBILE GEAR)](#_Toc57627006)
-
-[8. Global range test](#_Toc57627007)
-
-[9. Spike test](#_Toc57627008)
-
-[10. Digit rollover test](#_Toc57627009)
-
-[11. Stuck value/ flat line test](#_Toc57627010)
-
-[12. Rate of change test](#_Toc57627011)
-
-[13. Timing/gap test](#_Toc57627012)
-
-[14. Climatology test](#_Toc57627013)
-
-[15. Drift test (under development)](#_Toc57627014)
-
-[3.3. Quality control tests oxygen/turbidity (under development)](#_Toc57627015)
-
-[4. Delayed-mode quality control (under development)](#_Toc57627016)
-
-[4.1. Quality control tests (under development)](#_Toc57627017)
-
-[5. References](#_Toc57627018)
+* [References](#_Toc57627018)
 
 
 
