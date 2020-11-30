@@ -1,6 +1,8 @@
 # BDC_QC
 Collection of manuals and scripts to assist in automated quality assurance and quality control for oceanographic data collected via fishing gear as a platform.
 
+<br>
+
 ## Manual QC
 
 Fishing gear as a platform for sensors:
@@ -10,6 +12,8 @@ Implementation of real-time quality control of in-situ temperature and salinity 
 Version 1
 
 November 2020
+
+<br>
 
 ## Table of contents
 
@@ -43,7 +47,7 @@ November 2020
 <!--te-->
 
 
-
+<br>
 
 ## Introduction
 
@@ -102,8 +106,6 @@ Figure 2. Schematic of the data flow applied to oceanographic data from fishing 
 
 ### 3.1. Fisheries quality control tests
 
-<br>
-
 #### Platform identification (under development)
 
 Check if there is an unknown sensor ID/Vessel ID
@@ -136,8 +138,6 @@ Check if the gear type assigned is correct. Distance is calculated between the f
 <br>
 
 ### 3.2. Quality control tests CTD
-
-<br>
 
 #### Impossible date test
 
@@ -199,10 +199,6 @@ This test applies a gross filter on the observed values of pressure, temperature
 
 <br>
 
-####
-
-<br>
-
 #### Spike test
 
 The spike tests checks whether there is a significant difference between sequential measurements, by comparing a measurement to its adjacent ones. The test does not consider differences in pressure, and rather assumes measurements that adequately reproduce changes in temperature and salinity with pressure.
@@ -241,10 +237,6 @@ It is possible that, when sensors fail, continuously repeated observations of th
 
 <br>
 
-####
-
-<br>
-
 #### Rate of change test
 
 This test is applied per segment (Up-Down-Bottom), and inspects the segments on a rate of change exceeding a threshold defined by the operator. In this case the thresholds are based on the IOOS examples (U.S. Integrated Ocean Observing System, 2020), where the rate of change between measurement Tn-1 and Tn must be less than three standard deviations (3\*SD). The SD of the T time series is computed over the full segment.
@@ -257,10 +249,6 @@ Measurements failing this test are marked as suspect (3).
 | :---: | :---: |
 | Suspect (3) | _The rate of change exceeds the selected threshold._ |
 | Pass (1) | _Applies for test pass condition._ |
-
-<br>
-
-####
 
 <br>
 
@@ -328,8 +316,6 @@ Seasonal limits per area still have to be defined, in the meantime we take min a
 ### 3.3. Quality control tests oxygen/turbidity
 
 Under development
-
-<br>
 
 ## Delayed-mode quality control
 
