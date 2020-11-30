@@ -91,7 +91,7 @@ The flags used by BDC to indicate QC status are based on existing standards defi
 <p align="center">
 
 | **Code** | **Meaning** |
-| --- | --- |
+| :---: | :---: |
 | 0/NA | No QC was performed |
 | 1 | Good data |
 | 3 | Suspect data |
@@ -127,7 +127,7 @@ Check if there is an unknown sensor ID/Vessel ID
 Check if the vessel is operating in an expected region.
 
 | **Region** | **Longitude min** | **Longitude max** | **Latitude min** | **Latitude max** |
-| --- | --- | --- | --- | --- |
+| :---: | :---: | :---: | :---: | :---: |
 | **Greenland** | -60 | -15 | 55 | 90 |
 | **North Sea and Baltic** | -15 | 30 | 45 | 60 |
 | **Atlantic** | -75 | 30 | 55 | 90 |
@@ -139,10 +139,8 @@ Check if the vessel is operating in an expected region.
 Check if the gear type assigned is correct. Distance is calculated between the first and last data locations.
 
 | **Flags** | **Description** |
-| --- | --- |
-| Suspect (3) | _Gear type is considered suspect.
-				 Fixed: distance > 200 meters
-				 Mobile: distance <= 200 meters_ |
+| :---: | :---: |
+| Suspect (3) | _Gear type is considered suspect.<br\> Fixed: distance > 200 meters<br\>Mobile: distance <= 200 meters_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 ### 3.2. Quality control tests CTD
@@ -152,18 +150,16 @@ Check if the gear type assigned is correct. Distance is calculated between the f
 The date of the profile can be no earlier than 01/01/2010 and no later than current date in UTC
 
 | **Flags** | **Description** |
-| --- | --- |
-| Fail (4) | _Impossible date
-			01/01/2010 <Date> UTC_ |
+| :---: | :---: |
+| Fail (4) | _Impossible date <br\> 01/01/2010 <Date> UTC_ |
 | Pass (1) | _Applies for test pass condition._ |
 
-1.
 #### Impossible location test
 
 This simple test controls whether the geographic location is sensible, based on the global limits for longitude and latitude.
 
 | **Flags** | **Description** |
-| --- | --- |
+| :---: | :---: |
 | Fail (4) | _Impossible location_
  -180 \&lt; longitude \&gt; 180 -90 \&lt; latitude \&gt; 90 |
 | Pass (1) | _Applies for test pass condition._ |
@@ -174,7 +170,7 @@ This simple test controls whether the geographic location is sensible, based on 
 This test requires that the observation latitude and longitude from a float profile be located in an ocean. In this case a 5 minute bathymetry file (ETOPO5/TerrainBase) downloaded from [http://www.ngdc.noaa.gov/mgg/global/etopo5.html](http://www.ngdc.noaa.gov/mgg/global/etopo5.html) is used.
 
 | **Flags** | **Description** |
-| --- | --- |
+| :---: | :---: |
 | Fail (4) | _Measurement is on land._ |
 | Pass (1) | _Applies for test pass condition._ |
 
@@ -186,7 +182,7 @@ This test controls whether there are no erroneous locations provided. The speed 
 This test is helpful for determining if there is an error in merging the sensor and GPS data, often due to setting a sensor to a time zone other than UTC.
 
 | **Flags** | **Description** |
-| --- | --- |
+| :---: | :---: |
 | Fail (4) | _Speed is too high for mobile gear fishing._
 Vessel speed \&gt; 4.12 ms−1 (8 knots) |
 | Pass (1) | _Applies for test pass condition._ |
@@ -199,7 +195,7 @@ Gross filter on the observed values of pressure, temperature and salinity based 
 This test applies a gross filter on the observed values of pressure, temperature and salinity.
 
 | **Flags** | **Description** |
-| --- | --- |
+| :---: | :---: |
 | Fail (4) | _Measurement outside sensor operating range_
  -5 \&lt; Pressure -2 \&lt; Temperature \&gt; 35 °C2 \&lt; Salinity \&gt; 42 PSU |
 | Suspect (3) | -5 \&lt;= Pressure \&lt; 0Pressure \&gt; Max sensor depth + 10% |
@@ -218,7 +214,7 @@ Here, V2 is the tested value, and V1 and V3 are the values before and after. Spi
 Cut-off values are based on (Wong et al., 2020), and V2 will be flagged based on the following values.
 
 | **Flags** | **Description** |
-| --- | --- |
+| :---: | :---: |
 | Fail (4) | _Measurement differs significantly from its neighbours_
  Pressure \&lt; 500 dbar: Test value T \&gt; 6.0 °C Test value S \&gt; 0.9 PSU
  Pressure \&gt; = 500 dbar: Test value T \&gt; 2.0°C Test value S \&gt; 0.3 PSU
@@ -231,7 +227,7 @@ Cut-off values are based on (Wong et al., 2020), and V2 will be flagged based on
 This is a special version of the spike test, which compares the measurements at the end of the profile to the adjacent measurement. Temperature at the bottom should not differ from the adjacent measurement by more than 1°C. Action: Values that fail the test should be flagged as bad data.
 
 | **Flags** | **Description** |
-| --- | --- |
+| :---: | :---: |
 | Fail (4) | _Measurement differs significantly from its neighbours_
 T2 - T1 \&gt; 1.0 °C |
 | Pass (1) | _Applies for test pass condition._ |
@@ -242,7 +238,7 @@ T2 - T1 \&gt; 1.0 °C |
 It is possible that, when sensors fail, continuously repeated observations of the same value are produced. In this test, the present observation is compared to several previous observations. The present observation is flagged if the present observation is the same as all previous observations, calculating in a tolerance value.
 
 | **Flags** | **Description** |
-| --- | --- |
+| :---: | :---: |
 | Fail (4) | _The five most recent observations are equal_
 Tolerance values: Temperature: 0.05 °C Salinity: 0.05 PSUPressure: 0.5 dbar |
 | Suspect (3) | _The three most recent observations are equal_ |
@@ -261,7 +257,7 @@ This test needs to find a balance between setting a threshold too low, triggerin
 Measurements failing this test are marked as suspect (3).
 
 | **Flags** | **Description** |
-| --- | --- |
+| :---: | :---: |
 | Suspect (3) | _The rate of change exceeds the selected threshold._ |
 | Pass (1) | _Applies for test pass condition._ |
 
@@ -276,7 +272,7 @@ This test controls whether the most recent measurement has been received within 
 Measurements failing this test are only marked as suspect, to be controlled later.
 
 | **Flags** | **Description** |
-| --- | --- |
+| :---: | :---: |
 | Suspect (3) | _Check for the arrival of data_
 Data didn&#39;t come in as expected: NOW – TIM\_STMP \&gt; TIM\_INC |
 | Pass (1) | _Applies for test pass condition._ |
@@ -320,7 +316,7 @@ Arctic Sea (above 60N)
 Seasonal limits per area still have to be defined, in the meantime we take min and max of temp and sal of all measurements from our vessels in DB.
 
 | **Flags** | **Description** |
-| --- | --- |
+| :---: | :---: |
 | Suspect (3) | _Measurement outside climatology range_ Seas\_min\_T \&lt; Temperature\&gt; Seas\_max\_TSeas\_min\_S \&lt; Salinity \&gt; Seas\_max\_S |
 | Pass (1) | _Applies for test pass condition._ |
 
