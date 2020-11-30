@@ -1,8 +1,7 @@
 # BDC_QC
 Collection of manuals and scripts to assist in automated quality assurance and quality control for oceanographic data collected via fishing gear as a platform.
 
-
-![](RackMultipart20201130-4-1ke7nk4_html_28a4266de1118ff2.png)
+## Manual QC
 
 Fishing gear as a platform for sensors:
 
@@ -10,70 +9,71 @@ Implementation of real-time quality control of in-situ temperature and salinity 
 
 Version 1
 
-August 2020
+November 2020
 
 ## Table of contents
 
-[Table of contents 2](#_Toc57626994)
+[Table of contents](#_Toc57626994)
 
-[1. Introduction 3](#_Toc57626995)
+[1. Introduction](#_Toc57626995)
 
-[2. Flags 3](#_Toc57626996)
+[2. Flags](#_Toc57626996)
 
-[3. Real-time Quality control 5](#_Toc57626997)
+[3. Real-time Quality control](#_Toc57626997)
 
-[3.1. Fisheries quality control tests 5](#_Toc57626998)
+[3.1. Fisheries quality control tests](#_Toc57626998)
 
-[1. Platform identification (under development) 5](#_Toc57626999)
+[1. Platform identification (under development)](#_Toc57626999)
 
-[2. Vessel ID control (under development) 5](#_Toc57627000)
+[2. Vessel ID control (under development)](#_Toc57627000)
 
-[3. Gear type control (under development) 6](#_Toc57627001)
+[3. Gear type control (under development)](#_Toc57627001)
 
-[3.2. Quality control tests CTD 6](#_Toc57627002)
+[3.2. Quality control tests CTD](#_Toc57627002)
 
-[4. Impossible date test 6](#_Toc57627003)
+[4. Impossible date test](#_Toc57627003)
 
-[5. Impossible location test 6](#_Toc57627004)
+[5. Impossible location test](#_Toc57627004)
 
-[6. Position on land test 7](#_Toc57627005)
+[6. Position on land test](#_Toc57627005)
 
-[7. Impossible speed test (MOBILE GEAR) 7](#_Toc57627006)
+[7. Impossible speed test (MOBILE GEAR)](#_Toc57627006)
 
-[8. Global range test 7](#_Toc57627007)
+[8. Global range test](#_Toc57627007)
 
-[9. Spike test 8](#_Toc57627008)
+[9. Spike test](#_Toc57627008)
 
-[10. Digit rollover test 8](#_Toc57627009)
+[10. Digit rollover test](#_Toc57627009)
 
-[11. Stuck value/ flat line test 9](#_Toc57627010)
+[11. Stuck value/ flat line test](#_Toc57627010)
 
-[12. Rate of change test 9](#_Toc57627011)
+[12. Rate of change test](#_Toc57627011)
 
-[13. Timing/gap test 10](#_Toc57627012)
+[13. Timing/gap test](#_Toc57627012)
 
-[14. Climatology test 10](#_Toc57627013)
+[14. Climatology test](#_Toc57627013)
 
-[15. Drift test (under development) 11](#_Toc57627014)
+[15. Drift test (under development)](#_Toc57627014)
 
-[3.3. Quality control tests oxygen/turbidity 11](#_Toc57627015)
+[3.3. Quality control tests oxygen/turbidity (under development)](#_Toc57627015)
 
-[4. Delayed-mode quality control 11](#_Toc57627016)
+[4. Delayed-mode quality control (under development)](#_Toc57627016)
 
-[4.1. Quality control tests 11](#_Toc57627017)
+[4.1. Quality control tests (under development)](#_Toc57627017)
 
-[5. References 11](#_Toc57627018)
+[5. References](#_Toc57627018)
 
-1.
+
+
 ## Introduction
 
 This document describes the implementation of the automated checks that are performed on CTD (Conductivity, Temperature, Depth) data that are collected via fishing gear as a platform for sensors. Trajectory data describe the positions and time of the fishing vessel.
 
-![](RackMultipart20201130-4-1ke7nk4_html_a3856030cff81f4f.png)
+![BDC concept](https://user-images.githubusercontent.com/70140203/100598077-88045780-32fe-11eb-935d-c67de78713d9.png)
 
 Figure 1. A fishing vessel as a data collection platform.
 
-1.
+
 ## Flags
 
 The data collected by fishing vessels of opportunity, i.e. with sensors attached to fishing gear, is aimed to be interoperable and used by different users with different requirements. In order to maximize (re)usability, the data is quality controlled and flagged to characterize data. Flags are always included in the data delivery, to optimize data reliability and consistency.
@@ -309,25 +309,22 @@ Seasonal limits per area still have to be defined, in the meantime we take min a
 
 | **Flags** | **Description** |
 | --- | --- |
-| Suspect (3) | _Measurement outside climatology range_
- Seas\_min\_T \&lt; Temperature\&gt; Seas\_max\_TSeas\_min\_S \&lt; Salinity \&gt; Seas\_max\_S |
+| Suspect (3) | _Measurement outside climatology range_ Seas\_min\_T \&lt; Temperature\&gt; Seas\_max\_TSeas\_min\_S \&lt; Salinity \&gt; Seas\_max\_S |
 | Pass (1) | _Applies for test pass condition._ |
 
-1.
+
 #### Drift test (under development)
 
 ### 3.3. Quality control tests oxygen/turbidity
 
 Under development
 
-1.
 ## Delayed-mode quality control
 
 ### 4.1. Quality control tests
 
 Under development
 
-1.
 ## References
 
 Annie Wong, Robert Keeley, Thierry Carval and the Argo Data Management Team (2020).
