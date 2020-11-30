@@ -1,2 +1,339 @@
-# BDC_qc
+# BDC_QC
 Collection of manuals and scripts to assist in automated quality assurance and quality control for oceanographic data collected via fishing gear as a platform.
+
+
+![](RackMultipart20201130-4-1ke7nk4_html_28a4266de1118ff2.png)
+
+Fishing gear as a platform for sensors:
+
+Implementation of real-time quality control of in-situ temperature and salinity data collected via fishing gear
+
+Version 1
+
+August 2020
+
+## Table of contents
+
+[Table of contents 2](#_Toc57626994)
+
+[1. Introduction 3](#_Toc57626995)
+
+[2. Flags 3](#_Toc57626996)
+
+[3. Real-time Quality control 5](#_Toc57626997)
+
+[3.1. Fisheries quality control tests 5](#_Toc57626998)
+
+[1. Platform identification (under development) 5](#_Toc57626999)
+
+[2. Vessel ID control (under development) 5](#_Toc57627000)
+
+[3. Gear type control (under development) 6](#_Toc57627001)
+
+[3.2. Quality control tests CTD 6](#_Toc57627002)
+
+[4. Impossible date test 6](#_Toc57627003)
+
+[5. Impossible location test 6](#_Toc57627004)
+
+[6. Position on land test 7](#_Toc57627005)
+
+[7. Impossible speed test (MOBILE GEAR) 7](#_Toc57627006)
+
+[8. Global range test 7](#_Toc57627007)
+
+[9. Spike test 8](#_Toc57627008)
+
+[10. Digit rollover test 8](#_Toc57627009)
+
+[11. Stuck value/ flat line test 9](#_Toc57627010)
+
+[12. Rate of change test 9](#_Toc57627011)
+
+[13. Timing/gap test 10](#_Toc57627012)
+
+[14. Climatology test 10](#_Toc57627013)
+
+[15. Drift test (under development) 11](#_Toc57627014)
+
+[3.3. Quality control tests oxygen/turbidity 11](#_Toc57627015)
+
+[4. Delayed-mode quality control 11](#_Toc57627016)
+
+[4.1. Quality control tests 11](#_Toc57627017)
+
+[5. References 11](#_Toc57627018)
+
+1.
+## Introduction
+
+This document describes the implementation of the automated checks that are performed on CTD (Conductivity, Temperature, Depth) data that are collected via fishing gear as a platform for sensors. Trajectory data describe the positions and time of the fishing vessel.
+
+![](RackMultipart20201130-4-1ke7nk4_html_a3856030cff81f4f.png)
+
+Figure 1. A fishing vessel as a data collection platform.
+
+1.
+## Flags
+
+The data collected by fishing vessels of opportunity, i.e. with sensors attached to fishing gear, is aimed to be interoperable and used by different users with different requirements. In order to maximize (re)usability, the data is quality controlled and flagged to characterize data. Flags are always included in the data delivery, to optimize data reliability and consistency.
+
+Quality checks are based on the tests described by IOOS (U.S. Integrated Ocean Observing System, 2020) and the Argo network (Wong et al., 2020).
+
+The flags used by BDC to indicate QC status are based on existing standards defined by other programs and datasets for oceanographic observations. Flags are indicated in table 1.
+
+Table 1. Quality flags.
+
+| **Code** | **Meaning** |
+| --- | --- |
+| 0/NA | No QC was performed |
+| 1 | Good data |
+| 3 | Suspect data |
+| 4 | Bad data |
+| 5 | Corrected data |
+| 9 | Missing value |
+
+- Data flagged as (0) are not quality controlled, and therefore recommended not to be used without QC performed by the user.
+- Data flagged as (1) have been quality controlled, and can be used safely.
+- Data flagged as (3) have been quality controlled, and marked as suspect. These data can&#39;t be used directly, but have the potential to be corrected in delayed mode.
+- Data flagged as (4) have been quality controlled and should be rejected.
+- Data flagged as (5) have been corrected.
+- Data flagged as (9) are missing.
+
+1.
+## Real-time Quality control
+
+![](RackMultipart20201130-4-1ke7nk4_html_14790bc8c7467c29.png)
+
+Figure 2. Schematic of the data flow applied to oceanographic data from fishing vessels.
+
+### 3.1. Fisheries quality control tests
+
+1.
+#### Platform identification (under development)
+
+Check if there is an unknown sensor ID/Vessel ID
+
+1.
+#### Vessel ID control (under development)
+
+Check if the vessel is operating in an expected region.
+
+| **Region** | **Longitude min** | **Longitude max** | **Latitude min** | **Latitude max** |
+| --- | --- | --- | --- | --- |
+| **Greenland** | -60 | -15 | 55 | 90 |
+| **North Sea and Baltic** | -15 | 30 | 45 | 60 |
+| **Atlantic** | -75 | 30 | 55 | 90 |
+| **New Zealand** | 160 | 185 (on a 0-360 degree scale) or -175 (on a -180-180 scale) | -50 | -30 |
+| **Alaska** | -180 | -125 | 45 | 90 |
+
+1.
+#### Gear type control (under development)
+
+Check if the gear type assigned is correct.
+
+### 3.2. Quality control tests CTD
+
+1.
+#### Impossible date test
+
+The date of the profile can be no earlier than 01/01/2010 and no later than current date in UTC
+
+| **Flags** | **Description** |
+| --- | --- |
+| Fail (4) | _Impossible date_
+01/01/2010 \&lt; Date \&gt; UTC |
+| Pass (1) | _Applies for test pass condition._ |
+
+1.
+#### Impossible location test
+
+This simple test controls whether the geographic location is sensible, based on the global limits for longitude and latitude.
+
+| **Flags** | **Description** |
+| --- | --- |
+| Fail (4) | _Impossible location_
+ -180 \&lt; longitude \&gt; 180 -90 \&lt; latitude \&gt; 90 |
+| Pass (1) | _Applies for test pass condition._ |
+
+1.
+#### Position on land test
+
+This test requires that the observation latitude and longitude from a float profile be located in an ocean. In this case a 5 minute bathymetry file (ETOPO5/TerrainBase) downloaded from [http://www.ngdc.noaa.gov/mgg/global/etopo5.html](http://www.ngdc.noaa.gov/mgg/global/etopo5.html) is used.
+
+| **Flags** | **Description** |
+| --- | --- |
+| Fail (4) | _Measurement is on land._ |
+| Pass (1) | _Applies for test pass condition._ |
+
+1.
+#### Impossible speed test (MOBILE GEAR)
+
+This test controls whether there are no erroneous locations provided. The speed of the vessels are generated given the positions and times of the vessel. Vessel speed is expected not to exceed 3 ms−1. Otherwise, it means either the positions or times are bad data, or a vessel is sailing full speed rather than fishing.
+
+This test is helpful for determining if there is an error in merging the sensor and GPS data, often due to setting a sensor to a time zone other than UTC.
+
+| **Flags** | **Description** |
+| --- | --- |
+| Fail (4) | _Speed is too high for mobile gear fishing._
+Vessel speed \&gt; 4.12 ms−1 (8 knots) |
+| Pass (1) | _Applies for test pass condition._ |
+
+1.
+#### Global range test
+
+Gross filter on the observed values of pressure, temperature and salinity based on the sensor ranges (NKE TD, NKE CTD and ZebraTech Moana TD).
+
+This test applies a gross filter on the observed values of pressure, temperature and salinity.
+
+| **Flags** | **Description** |
+| --- | --- |
+| Fail (4) | _Measurement outside sensor operating range_
+ -5 \&lt; Pressure -2 \&lt; Temperature \&gt; 35 °C2 \&lt; Salinity \&gt; 42 PSU |
+| Suspect (3) | -5 \&lt;= Pressure \&lt; 0Pressure \&gt; Max sensor depth + 10% |
+| Pass (1) | _Applies for test pass condition._ |
+
+####
+
+
+1.
+#### Spike test
+
+The spike tests checks whether there is a significant difference between sequential measurements, by comparing a measurement to its adjacent ones. The test does not consider differences in pressure, and rather assumes measurements that adequately reproduce changes in temperature and salinity with pressure.
+
+Here, V2 is the tested value, and V1 and V3 are the values before and after. Spikes consisting of more than one data point are difficult to capture, but their onset may be flagged by the rate of change test.
+
+Cut-off values are based on (Wong et al., 2020), and V2 will be flagged based on the following values.
+
+| **Flags** | **Description** |
+| --- | --- |
+| Fail (4) | _Measurement differs significantly from its neighbours_
+ Pressure \&lt; 500 dbar: Test value T \&gt; 6.0 °C Test value S \&gt; 0.9 PSU
+ Pressure \&gt; = 500 dbar: Test value T \&gt; 2.0°C Test value S \&gt; 0.3 PSU
+ |
+| Pass (1) | _Applies for test pass condition._ |
+
+1.
+#### Digit rollover test
+
+This is a special version of the spike test, which compares the measurements at the end of the profile to the adjacent measurement. Temperature at the bottom should not differ from the adjacent measurement by more than 1°C. Action: Values that fail the test should be flagged as bad data.
+
+| **Flags** | **Description** |
+| --- | --- |
+| Fail (4) | _Measurement differs significantly from its neighbours_
+T2 - T1 \&gt; 1.0 °C |
+| Pass (1) | _Applies for test pass condition._ |
+
+1.
+#### Stuck value/ flat line test
+
+It is possible that, when sensors fail, continuously repeated observations of the same value are produced. In this test, the present observation is compared to several previous observations. The present observation is flagged if the present observation is the same as all previous observations, calculating in a tolerance value.
+
+| **Flags** | **Description** |
+| --- | --- |
+| Fail (4) | _The five most recent observations are equal_
+Tolerance values: Temperature: 0.05 °C Salinity: 0.05 PSUPressure: 0.5 dbar |
+| Suspect (3) | _The three most recent observations are equal_ |
+| Pass (1) | _Applies for test pass condition._ |
+
+####
+
+
+1.
+#### Rate of change test
+
+This test is applied per segment (Up-Down-Bottom), and inspects the segments on a rate of change exceeding a threshold defined by the operator. In this case the thresholds are based on the IOOS examples (U.S. Integrated Ocean Observing System, 2020), where the rate of change between measurement Tn-1 and Tn must be less than three standard deviations (3\*SD). The SD of the T time series is computed over the full segment.
+
+This test needs to find a balance between setting a threshold too low, triggering too many false alarms, and setting a threshold too high, triggering too little alarms.
+
+Measurements failing this test are marked as suspect (3).
+
+| **Flags** | **Description** |
+| --- | --- |
+| Suspect (3) | _The rate of change exceeds the selected threshold._ |
+| Pass (1) | _Applies for test pass condition._ |
+
+####
+
+
+1.
+#### Timing/gap test
+
+This test controls whether the most recent measurement has been received within the expected time period.
+
+Measurements failing this test are only marked as suspect, to be controlled later.
+
+| **Flags** | **Description** |
+| --- | --- |
+| Suspect (3) | _Check for the arrival of data_
+Data didn&#39;t come in as expected: NOW – TIM\_STMP \&gt; TIM\_INC |
+| Pass (1) | _Applies for test pass condition._ |
+
+1.
+#### Climatology test
+
+Test that data point falls within seasonal expectations according to different regions.
+
+This test is a variation on the gross range check, where the thresholds T\_Season\_MAX and T\_Season\_MIN are adjusted monthly, seasonally, or at some other operator-selected time period (TIM\_TST) in a specific region. Because of the dynamic nature of T and S in some locations, no fail flag is identified for this test and measurements will only be marked as &#39;suspect&#39;.
+
+Regional ranges are defined as the following ([https://archimer.ifremer.fr/doc/00251/36230/34790.pdf](https://archimer.ifremer.fr/doc/00251/36230/34790.pdf)), as seen on the map below. Cornerpoints for the Red Sea and Mediterranean come from the Argo manual.
+
+![](RackMultipart20201130-4-1ke7nk4_html_564a643f7d9599cb.jpg)
+
+Red Sea
+
+- Temperature in range 21.7°C to 40.0°C
+- Salinity in range 2.0 to 41.0
+
+Mediterranean Sea
+
+- Temperature in range 10.0°C to 40.0°C
+- Salinity in range 2.0 to 40.0
+
+North Western Shelves (from 60 N to 50 N and 20 W to 10 E)
+
+- Temperature in range –2.0°C to 24.0°C
+- Salinity in range 0.0 to 37.0
+
+South West Shelves (From 25 N to 50 N and 30 W to 0 W)
+
+- Temperature in range –2.0°C to 30.0°C
+- Salinity in range 0.0 to 38.0
+
+Arctic Sea (above 60N)
+
+- Temperature in range –1.92°C to 25.0°C
+- Salinity in range 2.0 to 40.0
+
+Seasonal limits per area still have to be defined, in the meantime we take min and max of temp and sal of all measurements from our vessels in DB.
+
+| **Flags** | **Description** |
+| --- | --- |
+| Suspect (3) | _Measurement outside climatology range_
+ Seas\_min\_T \&lt; Temperature\&gt; Seas\_max\_TSeas\_min\_S \&lt; Salinity \&gt; Seas\_max\_S |
+| Pass (1) | _Applies for test pass condition._ |
+
+1.
+#### Drift test (under development)
+
+### 3.3. Quality control tests oxygen/turbidity
+
+Under development
+
+1.
+## Delayed-mode quality control
+
+### 4.1. Quality control tests
+
+Under development
+
+1.
+## References
+
+Annie Wong, Robert Keeley, Thierry Carval and the Argo Data Management Team (2020).
+
+Argo Quality Control Manual for CTD and Trajectory Data. [http://dx.doi.org/10.13155/33951](http://dx.doi.org/10.13155/33951)
+
+U.S. Integrated Ocean Observing System, 2020. Manual for Real-Time Quality Control of In-situ Temperature and Salinity Data Version 2.1: A Guide to Quality Control and Quality Assurance of In-situ Temperature and Salinity Observations. 50 pp. [https://doi.org/10.25923/x02m-m555](https://doi.org/10.25923/x02m-m555)
+
+EuroGOOS DATA-MEQ working group (2010). Recommendations for in-situ data Near Real Time Quality Control. https://doi.org/10.13155/36230
