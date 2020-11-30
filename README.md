@@ -140,7 +140,7 @@ Check if the gear type assigned is correct. Distance is calculated between the f
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Suspect (3) | _Gear type is considered suspect.<br\> Fixed: distance > 200 meters<br\>Mobile: distance <= 200 meters_ |
+| Suspect (3) | _Gear type is considered suspect.\Fixed: distance $\ge$ 200 meters\Mobile: distance $\leq$ 200 meters_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 ### 3.2. Quality control tests CTD
@@ -151,7 +151,7 @@ The date of the profile can be no earlier than 01/01/2010 and no later than curr
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Impossible date <br\> 01/01/2010 <Date> UTC_ |
+| Fail (4) | _Impossible date: 01/01/2010 $\le$ Date $\ge$ UTC_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 #### Impossible location test
@@ -160,8 +160,7 @@ This simple test controls whether the geographic location is sensible, based on 
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Impossible location_
- -180 \&lt; longitude \&gt; 180 -90 \&lt; latitude \&gt; 90 |
+| Fail (4) | _Impossible location: -180 $\le$ longitude $ge$ 180 -90 $\le$ latitude $\ge$ 90_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 1.
@@ -286,7 +285,7 @@ This test is a variation on the gross range check, where the thresholds T\_Seaso
 
 Regional ranges are defined as the following ([https://archimer.ifremer.fr/doc/00251/36230/34790.pdf](https://archimer.ifremer.fr/doc/00251/36230/34790.pdf)), as seen on the map below. Cornerpoints for the Red Sea and Mediterranean come from the Argo manual.
 
-![](RackMultipart20201130-4-1ke7nk4_html_564a643f7d9599cb.jpg)
+![clima](https://user-images.githubusercontent.com/70140203/100601137-8341a280-3302-11eb-83da-4dd1b9ada1a9.jpg)
 
 Red Sea
 
