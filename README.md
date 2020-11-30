@@ -13,54 +13,56 @@ November 2020
 
 ## Table of contents
 
-* [Introduction](#_Toc57626995)
+* [Introduction](#intro)
 
-* [Flags](#_Toc57626996)
+* [Flags](#flags)
 
-* [Real-time Quality control](#_Toc57626997)
+* [Real-time Quality control](#rtd)
 
-	* [Fisheries quality control tests](#_Toc57626998)
+	* [Fisheries quality control tests](#fisheries)
 
-		* [Platform identification (under development)](#_Toc57626999)
+		* [Platform identification (under development)](#platform)
 
-		* [Vessel ID control (under development)](#_Toc57627000)
+		* [Vessel ID control (under development)](#vessel)
 
-		* [Gear type control (under development)](#_Toc57627001)
+		* [Gear type control (under development)](#gear)
 
-	* [Quality control tests CTD](#_Toc57627002)
+	* [Quality control tests CTD](#CTD)
 
-		* [Impossible date test](#_Toc57627003)
+		* [Impossible date test](#date)
 		 
-		* [Impossible location test](#_Toc57627004)
+		* [Impossible location test](#location)
 		 
-		* [Position on land test](#_Toc57627005)
+		* [Position on land test](#land)
 		 
-		* [Impossible speed test (MOBILE GEAR)](#_Toc57627006)
+		* [Impossible speed test (MOBILE GEAR)](#speed)
 		 
-		* [Global range test](#_Toc57627007)
+		* [Global range test](#global)
 		 
-		* [Spike test](#_Toc57627008)
+		* [Spike test](#spike)
 		 
-		* [Digit rollover test](#_Toc57627009)
+		* [Digit rollover test](#rollover)
 		 
-		* [Stuck value/ flat line test](#_Toc57627010)
+		* [Stuck value/ flat line test](#stuck)
 		 
-		* [Rate of change test](#_Toc57627011)
+		* [Rate of change test](#roc)
 		 
-		* [Timing/gap test](#_Toc57627012)
+		* [Timing/gap test](#timing)
 		 
-		* [Climatology test](#_Toc57627013)
+		* [Climatology test](#clima)
 		
-		* [Drift test (under development)](#_Toc57627014)
+		* [Drift test (under development)](#drift)
 
-	* [Quality control tests oxygen/turbidity (under development)](#_Toc57627015)
+	* [Quality control tests oxygen/turbidity (under development)](#oxygen)
 
-* [Delayed-mode quality control (under development)](#_Toc57627016)
+* [Delayed-mode quality control (under development)](#delayed)
 
-* [Quality control tests (under development)](#_Toc57627017)
+* [Quality control tests (under development)](#test)
 
-* [References](#_Toc57627018)
+* [References](#references)
 
+
+<!-- toc --> 
 
 
 ## Introduction
