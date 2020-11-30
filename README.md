@@ -1,4 +1,4 @@
-<p align="center">
+
 
 # BDC_QC
 Collection of manuals and scripts to assist in automated quality assurance and quality control for oceanographic data collected via fishing gear as a platform.
@@ -6,6 +6,8 @@ Collection of manuals and scripts to assist in automated quality assurance and q
 <br>
 
 ## Manual
+
+<p align="center">
 
 Fishing gear as a platform for sensors: Implementation of real-time quality control of in-situ temperature and salinity data collected via fishing gear
 
@@ -55,7 +57,7 @@ Authors: Berthe Vastenhoud, Carles Castro Muniain \& Cooper Van Vranken
 
 This document describes the implementation of the automated checks that are performed on CTD (Conductivity, Temperature, Depth) data that are collected via fishing gear as a platform for sensors. Trajectory data describe the positions and time of the fishing vessel.
 
-<img width="200" src="https://user-images.githubusercontent.com/70140203/100598077-88045780-32fe-11eb-935d-c67de78713d9.png">
+<img width="600" src="https://user-images.githubusercontent.com/70140203/100598077-88045780-32fe-11eb-935d-c67de78713d9.png">
 
 <sub> Figure 1. A fishing vessel as a data collection platform. </sub>
 
@@ -92,7 +94,7 @@ Table 1. Quality flags.
 
 ## Real-time Quality control
 
-<img width="200" src="https://user-images.githubusercontent.com/70140203/100599274-175e3a80-3300-11eb-927c-fc7ebc2ca4f6.png">
+<img width="800" src="https://user-images.githubusercontent.com/70140203/100599274-175e3a80-3300-11eb-927c-fc7ebc2ca4f6.png">
 
 <sub>Figure 2. Schematic of the data flow applied to oceanographic data from fishing vessels.</sub>
 
