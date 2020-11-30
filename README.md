@@ -140,7 +140,7 @@ Check if the gear type assigned is correct. Distance is calculated between the f
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Suspect (3) | _Gear type is considered suspect. <br><br> Fixed: &gt; distance > 200 meters <br> Mobile: distance <= 200 meters_ |
+| Suspect (3) | _Gear type is considered suspect. <br><br> Fixed: distance &gt; 200 meters <br> Mobile: distance &lt;= 200 meters_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 ### 3.2. Quality control tests CTD
@@ -160,7 +160,7 @@ This simple test controls whether the geographic location is sensible, based on 
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Impossible location: -180 $\le$ longitude $ge$ 180 -90 $\le$ latitude $\ge$ 90_ |
+| Fail (4) | _Impossible location: <br><br> -180 &lt; longitude &gt; 180 <br> -90 &lt; latitude &gt; 90_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 1.
@@ -173,7 +173,7 @@ This test requires that the observation latitude and longitude from a float prof
 | Fail (4) | _Measurement is on land._ |
 | Pass (1) | _Applies for test pass condition._ |
 
-1.
+
 #### Impossible speed test (MOBILE GEAR)
 
 This test controls whether there are no erroneous locations provided. The speed of the vessels are generated given the positions and times of the vessel. Vessel speed is expected not to exceed 3 ms−1. Otherwise, it means either the positions or times are bad data, or a vessel is sailing full speed rather than fishing.
@@ -182,11 +182,9 @@ This test is helpful for determining if there is an error in merging the sensor 
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Speed is too high for mobile gear fishing._
-Vessel speed \&gt; 4.12 ms−1 (8 knots) |
+| Fail (4) | _Speed is too high for mobile gear fishing. <br> Vessel speed &gt; 4.12 ms−1 (8 knots)_ |
 | Pass (1) | _Applies for test pass condition._ |
 
-1.
 #### Global range test
 
 Gross filter on the observed values of pressure, temperature and salinity based on the sensor ranges (NKE TD, NKE CTD and ZebraTech Moana TD).
@@ -195,15 +193,12 @@ This test applies a gross filter on the observed values of pressure, temperature
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Measurement outside sensor operating range_
- -5 \&lt; Pressure -2 \&lt; Temperature \&gt; 35 °C2 \&lt; Salinity \&gt; 42 PSU |
-| Suspect (3) | -5 \&lt;= Pressure \&lt; 0Pressure \&gt; Max sensor depth + 10% |
+| Fail (4) | _Measurement outside sensor operating range <br> -5 &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> 2 &lt; Salinity &gt; 42 PSU_ |
+| Suspect (3) | -5 &lt;= Pressure &lt; 0<br> Pressure &gt; Max sensor depth + 10% |
 | Pass (1) | _Applies for test pass condition._ |
 
 ####
 
-
-1.
 #### Spike test
 
 The spike tests checks whether there is a significant difference between sequential measurements, by comparing a measurement to its adjacent ones. The test does not consider differences in pressure, and rather assumes measurements that adequately reproduce changes in temperature and salinity with pressure.
@@ -214,39 +209,30 @@ Cut-off values are based on (Wong et al., 2020), and V2 will be flagged based on
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Measurement differs significantly from its neighbours_
- Pressure \&lt; 500 dbar: Test value T \&gt; 6.0 °C Test value S \&gt; 0.9 PSU
- Pressure \&gt; = 500 dbar: Test value T \&gt; 2.0°C Test value S \&gt; 0.3 PSU
- |
+| Fail (4) | _Measurement differs significantly from its neighbours <br><br> Pressure &lt; 500 dbar:<br> Test value T &gt; 6.0 °C <br> Test value S &gt; 0.9 PSU <br><br> Pressure &gt; = 500 dbar: <br> Test value T &gt; 2.0°C <br>Test value S &gt; 0.3 PSU_ |
 | Pass (1) | _Applies for test pass condition._ |
 
-1.
 #### Digit rollover test
 
 This is a special version of the spike test, which compares the measurements at the end of the profile to the adjacent measurement. Temperature at the bottom should not differ from the adjacent measurement by more than 1°C. Action: Values that fail the test should be flagged as bad data.
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Measurement differs significantly from its neighbours_
-T2 - T1 \&gt; 1.0 °C |
+| Fail (4) | _Measurement differs significantly from its neighbours <br><br> T2 - T1 &gt; 1.0 °C |
 | Pass (1) | _Applies for test pass condition._ |
 
-1.
 #### Stuck value/ flat line test
 
 It is possible that, when sensors fail, continuously repeated observations of the same value are produced. In this test, the present observation is compared to several previous observations. The present observation is flagged if the present observation is the same as all previous observations, calculating in a tolerance value.
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _The five most recent observations are equal_
-Tolerance values: Temperature: 0.05 °C Salinity: 0.05 PSUPressure: 0.5 dbar |
+| Fail (4) | _The five most recent observations are equal <br><br> Tolerance values: <br> Temperature: 0.05 °C <br> Salinity: 0.05 PSU <br> Pressure: 0.5 dbar_ |
 | Suspect (3) | _The three most recent observations are equal_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 ####
 
-
-1.
 #### Rate of change test
 
 This test is applied per segment (Up-Down-Bottom), and inspects the segments on a rate of change exceeding a threshold defined by the operator. In this case the thresholds are based on the IOOS examples (U.S. Integrated Ocean Observing System, 2020), where the rate of change between measurement Tn-1 and Tn must be less than three standard deviations (3\*SD). The SD of the T time series is computed over the full segment.
@@ -262,8 +248,6 @@ Measurements failing this test are marked as suspect (3).
 
 ####
 
-
-1.
 #### Timing/gap test
 
 This test controls whether the most recent measurement has been received within the expected time period.
@@ -272,11 +256,9 @@ Measurements failing this test are only marked as suspect, to be controlled late
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Suspect (3) | _Check for the arrival of data_
-Data didn&#39;t come in as expected: NOW – TIM\_STMP \&gt; TIM\_INC |
+| Suspect (3) | _Check for the arrival of data <br><br> Data didn&#39;t come in as expected: NOW – TIM\_STMP &gt; TIM\_INC_ |
 | Pass (1) | _Applies for test pass condition._ |
 
-1.
 #### Climatology test
 
 Test that data point falls within seasonal expectations according to different regions.
@@ -316,7 +298,7 @@ Seasonal limits per area still have to be defined, in the meantime we take min a
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Suspect (3) | _Measurement outside climatology range_ Seas\_min\_T \&lt; Temperature\&gt; Seas\_max\_TSeas\_min\_S \&lt; Salinity \&gt; Seas\_max\_S |
+| Suspect (3) | _Measurement outside climatology range_ Seas\_min\_T &lt; Temperature&gt; Seas\_max\_TSeas\_min\_S &lt; Salinity &gt; Seas\_max\_S |
 | Pass (1) | _Applies for test pass condition._ |
 
 
