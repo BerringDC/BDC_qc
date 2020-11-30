@@ -67,22 +67,32 @@ November 2020
 
 ## Introduction
 
+<center>
 This document describes the implementation of the automated checks that are performed on CTD (Conductivity, Temperature, Depth) data that are collected via fishing gear as a platform for sensors. Trajectory data describe the positions and time of the fishing vessel.
+</center>
+
+<p align="center">
 
 ![BDC concept](https://user-images.githubusercontent.com/70140203/100598077-88045780-32fe-11eb-935d-c67de78713d9.png)
 
 Figure 1. A fishing vessel as a data collection platform.
 
+</p>
+
+
 
 ## Flags
 
+<center>
 The data collected by fishing vessels of opportunity, i.e. with sensors attached to fishing gear, is aimed to be interoperable and used by different users with different requirements. In order to maximize (re)usability, the data is quality controlled and flagged to characterize data. Flags are always included in the data delivery, to optimize data reliability and consistency.
 
 Quality checks are based on the tests described by IOOS (U.S. Integrated Ocean Observing System, 2020) and the Argo network (Wong et al., 2020).
 
 The flags used by BDC to indicate QC status are based on existing standards defined by other programs and datasets for oceanographic observations. Flags are indicated in table 1.
 
-Table 1. Quality flags.
+</center>
+
+<p align="center">
 
 | **Code** | **Meaning** |
 | --- | --- |
@@ -92,6 +102,10 @@ Table 1. Quality flags.
 | 4 | Bad data |
 | 5 | Corrected data |
 | 9 | Missing value |
+
+<p align="center">
+
+Table 1. Quality flags.
 
 - Data flagged as (0) are not quality controlled, and therefore recommended not to be used without QC performed by the user.
 - Data flagged as (1) have been quality controlled, and can be used safely.
