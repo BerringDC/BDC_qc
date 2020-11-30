@@ -182,7 +182,7 @@ This test is helpful for determining if there is an error in merging the sensor 
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Speed is too high for mobile gear fishing. <br> Vessel speed &gt; 4.12 ms−1 (8 knots)_ |
+| Fail (4) | _Speed is too high for mobile gear fishing. <br><br> Vessel speed &gt; 4.12 ms−1 (8 knots)_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 #### Global range test
@@ -193,7 +193,7 @@ This test applies a gross filter on the observed values of pressure, temperature
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Measurement outside sensor operating range <br> -5 &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> 2 &lt; Salinity &gt; 42 PSU_ |
+| Fail (4) | _Measurement outside sensor operating range <br><br> -5 &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> 2 &lt; Salinity &gt; 42 PSU_ |
 | Suspect (3) | -5 &lt;= Pressure &lt; 0<br> Pressure &gt; Max sensor depth + 10% |
 | Pass (1) | _Applies for test pass condition._ |
 
@@ -218,7 +218,7 @@ This is a special version of the spike test, which compares the measurements at 
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Measurement differs significantly from its neighbours <br><br> T2 - T1 &gt; 1.0 °C |
+| Fail (4) | _Measurement differs significantly from its neighbours <br><br> T2 - T1 &gt; 1.0 °C_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 #### Stuck value/ flat line test
@@ -298,7 +298,7 @@ Seasonal limits per area still have to be defined, in the meantime we take min a
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Suspect (3) | _Measurement outside climatology range_ Seas\_min\_T &lt; Temperature&gt; Seas\_max\_TSeas\_min\_S &lt; Salinity &gt; Seas\_max\_S |
+| Suspect (3) | _Measurement outside climatology range <br><br> Seas\_min\_T &lt; Temperature&gt; Seas\_max\_T <br> Seas\_min\_S &lt; Salinity &gt; Seas\_max\_S_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 
