@@ -77,7 +77,7 @@ Figure 1. A fishing vessel as a data collection platform.
 
 </p>
 
-
+<br>
 
 ## Flags
 
@@ -110,17 +110,25 @@ Table 1. Quality flags.
 - Data flagged as (5) have been corrected.
 - Data flagged as (9) are missing.
 
+<br>
+
 ## Real-time Quality control
 
 ![schematics](https://user-images.githubusercontent.com/70140203/100599274-175e3a80-3300-11eb-927c-fc7ebc2ca4f6.png)
 
 Figure 2. Schematic of the data flow applied to oceanographic data from fishing vessels.
 
+<br>
+
 ### 3.1. Fisheries quality control tests
+
+<br>
 
 #### Platform identification (under development)
 
 Check if there is an unknown sensor ID/Vessel ID
+
+<br>
 
 #### Vessel ID control (under development)
 
@@ -134,6 +142,8 @@ Check if the vessel is operating in an expected region.
 | **New Zealand** | 160 | 185 (on a 0-360 degree scale) or -175 (on a -180-180 scale) | -50 | -30 |
 | **Alaska** | -180 | -125 | 45 | 90 |
 
+<br>
+
 #### Gear type control (under development)
 
 Check if the gear type assigned is correct. Distance is calculated between the first and last data locations.
@@ -143,7 +153,11 @@ Check if the gear type assigned is correct. Distance is calculated between the f
 | Suspect (3) | _Gear type is considered suspect. <br><br> Fixed: distance &gt; 200 meters <br> Mobile: distance &lt;= 200 meters_ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<br>
+
 ### 3.2. Quality control tests CTD
+
+<br>
 
 #### Impossible date test
 
@@ -154,6 +168,8 @@ The date of the profile can be no earlier than 01/01/2010 and no later than curr
 | Fail (4) | _Impossible date: <br><br> 01/01/2010 &lt; Date &gt; UTC_ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<br>
+
 #### Impossible location test
 
 This simple test controls whether the geographic location is sensible, based on the global limits for longitude and latitude.
@@ -163,7 +179,8 @@ This simple test controls whether the geographic location is sensible, based on 
 | Fail (4) | _Impossible location: <br><br> -180 &lt; longitude &gt; 180 <br> -90 &lt; latitude &gt; 90_ |
 | Pass (1) | _Applies for test pass condition._ |
 
-1.
+<br>
+
 #### Position on land test
 
 This test requires that the observation latitude and longitude from a float profile be located in an ocean. In this case a 5 minute bathymetry file (ETOPO5/TerrainBase) downloaded from [http://www.ngdc.noaa.gov/mgg/global/etopo5.html](http://www.ngdc.noaa.gov/mgg/global/etopo5.html) is used.
@@ -173,6 +190,7 @@ This test requires that the observation latitude and longitude from a float prof
 | Fail (4) | _Measurement is on land._ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<br>
 
 #### Impossible speed test (MOBILE GEAR)
 
@@ -184,6 +202,8 @@ This test is helpful for determining if there is an error in merging the sensor 
 | :---: | :---: |
 | Fail (4) | _Speed is too high for mobile gear fishing. <br><br> Vessel speed &gt; 4.12 ms−1 (8 knots)_ |
 | Pass (1) | _Applies for test pass condition._ |
+
+<br>
 
 #### Global range test
 
@@ -197,7 +217,11 @@ This test applies a gross filter on the observed values of pressure, temperature
 | Suspect (3) | -5 &lt;= Pressure &lt; 0<br> Pressure &gt; Max sensor depth + 10% |
 | Pass (1) | _Applies for test pass condition._ |
 
+<br>
+
 ####
+
+<br>
 
 #### Spike test
 
@@ -212,6 +236,8 @@ Cut-off values are based on (Wong et al., 2020), and V2 will be flagged based on
 | Fail (4) | _Measurement differs significantly from its neighbours <br><br> Pressure &lt; 500 dbar:<br> Test value T &gt; 6.0 °C <br> Test value S &gt; 0.9 PSU <br><br> Pressure &gt; = 500 dbar: <br> Test value T &gt; 2.0°C <br>Test value S &gt; 0.3 PSU_ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<br>
+
 #### Digit rollover test
 
 This is a special version of the spike test, which compares the measurements at the end of the profile to the adjacent measurement. Temperature at the bottom should not differ from the adjacent measurement by more than 1°C. Action: Values that fail the test should be flagged as bad data.
@@ -220,6 +246,8 @@ This is a special version of the spike test, which compares the measurements at 
 | :---: | :---: |
 | Fail (4) | _Measurement differs significantly from its neighbours <br><br> T2 - T1 &gt; 1.0 °C_ |
 | Pass (1) | _Applies for test pass condition._ |
+
+<br>
 
 #### Stuck value/ flat line test
 
@@ -231,7 +259,11 @@ It is possible that, when sensors fail, continuously repeated observations of th
 | Suspect (3) | _The three most recent observations are equal_ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<br>
+
 ####
+
+<br>
 
 #### Rate of change test
 
@@ -246,7 +278,11 @@ Measurements failing this test are marked as suspect (3).
 | Suspect (3) | _The rate of change exceeds the selected threshold._ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<br>
+
 ####
+
+<br>
 
 #### Timing/gap test
 
@@ -258,6 +294,8 @@ Measurements failing this test are only marked as suspect, to be controlled late
 | :---: | :---: |
 | Suspect (3) | _Check for the arrival of data <br><br> Data didn&#39;t come in as expected: NOW – TIM\_STMP &gt; TIM\_INC_ |
 | Pass (1) | _Applies for test pass condition._ |
+
+<br>
 
 #### Climatology test
 
@@ -301,18 +339,27 @@ Seasonal limits per area still have to be defined, in the meantime we take min a
 | Suspect (3) | _Measurement outside climatology range <br><br> Seas\_min\_T &lt; Temperature&gt; Seas\_max\_T <br> Seas\_min\_S &lt; Salinity &gt; Seas\_max\_S_ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<br>
 
 #### Drift test (under development)
+
+<br>
 
 ### 3.3. Quality control tests oxygen/turbidity
 
 Under development
 
+<br>
+
 ## Delayed-mode quality control
+
+<br>
 
 ### 4.1. Quality control tests
 
 Under development
+
+<br>
 
 ## References
 
