@@ -15,7 +15,7 @@ November 2020
 
 <!--ts-->
 
-* [Introduction](#introctuion)
+* [Introduction](#introduction)
 * [Flags](#flags)
 * [Real-time Quality control](#real-time-quality-control)
 	* [Fisheries quality control tests](#fisheries-quality-control-tests)
@@ -30,12 +30,12 @@ November 2020
 		* [Global range test](#global-range-test)
 		* [Spike test](#spike-test)
 		* [Digit rollover test](#digit-rollover-test)
-		* [Stuck value/ flat line test](#stuck-value-flat-line-test)
+		* [Stuck value / flat line test](#stuck-value-flat-line-test)
 		* [Rate of change test](#rate-of-change-test)
-		* [Timing/gap test](#timing-gap-test)
+		* [Timing / gap test](#timing-gap-test)
 		* [Climatology test](#climatology-test)
 		* [Drift test (under development)](#drift-test-under-development)
-	* [Quality control tests oxygen/turbidity (under development)](#quality-control-test-oxygen-turbidity-under-development)
+	* [Quality control tests oxygen / turbidity (under development)](#quality-control-test-oxygen-turbidity-under-development)
 * [Delayed-mode quality control (under development)](#delayed-mode-quality-control-under-development)
 * [Quality control tests (under development)](#quality-control-test-under-development)
 * [References](#references)
