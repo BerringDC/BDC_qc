@@ -118,12 +118,10 @@ Figure 2. Schematic of the data flow applied to oceanographic data from fishing 
 
 ### 3.1. Fisheries quality control tests
 
-1.
 #### Platform identification (under development)
 
 Check if there is an unknown sensor ID/Vessel ID
 
-1.
 #### Vessel ID control (under development)
 
 Check if the vessel is operating in an expected region.
@@ -136,22 +134,27 @@ Check if the vessel is operating in an expected region.
 | **New Zealand** | 160 | 185 (on a 0-360 degree scale) or -175 (on a -180-180 scale) | -50 | -30 |
 | **Alaska** | -180 | -125 | 45 | 90 |
 
-1.
 #### Gear type control (under development)
 
-Check if the gear type assigned is correct.
+Check if the gear type assigned is correct. Distance is calculated between the first and last data locations.
+
+| **Flags** | **Description** |
+| --- | --- |
+| Suspect (3) | _Gear type is considered suspect.
+				 Fixed: distance > 200 meters
+				 Mobile: distance <= 200 meters_ |
+| Pass (1) | _Applies for test pass condition._ |
 
 ### 3.2. Quality control tests CTD
 
-1.
 #### Impossible date test
 
 The date of the profile can be no earlier than 01/01/2010 and no later than current date in UTC
 
 | **Flags** | **Description** |
 | --- | --- |
-| Fail (4) | _Impossible date_
-01/01/2010 \&lt; Date \&gt; UTC |
+| Fail (4) | _Impossible date
+			01/01/2010 <Date> UTC_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 1.
