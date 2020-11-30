@@ -140,7 +140,7 @@ Check if the gear type assigned is correct. Distance is calculated between the f
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Suspect (3) | _Gear type is considered suspect.&nbsp;Fixed: distance > 200 meters &nbsp; Mobile: distance <= 200 meters_ |
+| Suspect (3) | _Gear type is considered suspect. - Fixed: distance > 200 meters - Mobile: distance <= 200 meters_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 ### 3.2. Quality control tests CTD
@@ -151,7 +151,7 @@ The date of the profile can be no earlier than 01/01/2010 and no later than curr
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Impossible date: 01/01/2010 $\le$ Date $\ge$ UTC_ |
+| Fail (4) | _Impossible date: <br> 01/01/2010 $\le$ Date $\ge$ UTC_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 #### Impossible location test
