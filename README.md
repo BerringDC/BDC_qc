@@ -1,4 +1,4 @@
-<center>
+<p align="center">
 
 # BDC_QC
 Collection of manuals and scripts to assist in automated quality assurance and quality control for oceanographic data collected via fishing gear as a platform.
@@ -55,7 +55,7 @@ Authors: Berthe Vastenhoud, Carles Castro Muniain \& Cooper Van Vranken
 
 This document describes the implementation of the automated checks that are performed on CTD (Conductivity, Temperature, Depth) data that are collected via fishing gear as a platform for sensors. Trajectory data describe the positions and time of the fishing vessel.
 
-![BDC concept](https://user-images.githubusercontent.com/70140203/100598077-88045780-32fe-11eb-935d-c67de78713d9.png | width=100)
+<img width="200" src="https://user-images.githubusercontent.com/70140203/100598077-88045780-32fe-11eb-935d-c67de78713d9.png">
 
 <sub> Figure 1. A fishing vessel as a data collection platform. </sub>
 
@@ -70,8 +70,6 @@ Quality checks are mainly based on the tests described by IOOS (U.S. Integrated 
 The flags used by BDC to indicate QC status are based on existing standards defined by other programs and datasets for oceanographic observations. Flags are indicated in table 1.
 
 
-<p align="center">
-
 | **Code** | **Meaning** |
 | :---: | :---: |
 | 0/NA | No QC was performed |
@@ -80,8 +78,6 @@ The flags used by BDC to indicate QC status are based on existing standards defi
 | 4 | Bad data |
 | 5 | Corrected data |
 | 9 | Missing value |
-
-<p align="center">
 
 Table 1. Quality flags.
 
@@ -96,7 +92,7 @@ Table 1. Quality flags.
 
 ## Real-time Quality control
 
-![schematics](https://user-images.githubusercontent.com/70140203/100599274-175e3a80-3300-11eb-927c-fc7ebc2ca4f6.png | width=150)
+<img width="200" src="https://user-images.githubusercontent.com/70140203/100599274-175e3a80-3300-11eb-927c-fc7ebc2ca4f6.png">
 
 <sub>Figure 2. Schematic of the data flow applied to oceanographic data from fishing vessels.</sub>
 
@@ -190,13 +186,14 @@ This test is helpful for determining if there is an error in merging the sensor 
 #### Global range test
 
 Gross filter on the observed values of pressure, temperature and salinity based on the sensor ranges (NKE TD, NKE CTD and ZebraTech Moana TD).
-	- [Zebra-Tech](zebra-tech.co.nz/moana)
-	- [NKE CTD](nke-instrumentation.com/ctd)
-	- [NKE TD](nke-instrumentation.com/td)
-	- [Hobo](www.onsetcomp.com)
-	- [Vemco_minilog](www.vemco.com)
-	- [Marport](www.marport.com)
-	- [Lowell TD](lowellinstruments.com)
+
+- [Zebra-Tech](zebra-tech.co.nz/moana)
+- [NKE CTD](nke-instrumentation.com/ctd)
+- [NKE TD](nke-instrumentation.com/td)
+- [Hobo](www.onsetcomp.com)
+- [Vemco_minilog](www.vemco.com)
+- [Marport](www.marport.com)
+- [Lowell TD](lowellinstruments.com)
 
 
 This test applies a gross filter on the observed values of pressure, temperature and salinity. Action: Values that fail the test should be flagged as bad data (4).
@@ -346,4 +343,4 @@ U.S. Integrated Ocean Observing System (2016) Manual for Quality Control of Temp
 
 EuroGOOS DATA-MEQ working group (2010). Recommendations for in-situ data Near Real Time Quality Control. https://doi.org/10.13155/36230
 
-</center>
+</p>
