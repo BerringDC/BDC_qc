@@ -35,9 +35,9 @@ November 2020
 		* [Timing / gap test](#timing-gap-test)
 		* [Climatology test](#climatology-test)
 		* [Drift test (under development)](#drift-test-under-development)
-	* [Quality control tests oxygen / turbidity (under development)](#quality-control-test-oxygen-turbidity-under-development)
-* [Delayed-mode quality control (under development)](#delayed-mode-quality-control-under-development)
-* [Quality control tests (under development)](#quality-control-test-under-development)
+	* [Quality control tests oxygen / turbidity (under development)](#quality-control-tests-oxygen-turbidity-under-development)
+* [Delayed-mode Quality control (under development)](#delayed-mode-quality-control-under-development)
+* [Quality control tests (under development)](#quality-control-tests-under-development)
 * [References](#references)
 
 <!--te-->
