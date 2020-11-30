@@ -13,56 +13,36 @@ November 2020
 
 ## Table of contents
 
-* [Introduction](#intro)
+<!--ts-->
 
+* [Introduction](#introctuion)
 * [Flags](#flags)
-
-* [Real-time Quality control](#rtd)
-
-	* [Fisheries quality control tests](#fisheries)
-
-		* [Platform identification (under development)](#platform)
-
-		* [Vessel ID control (under development)](#vessel)
-
-		* [Gear type control (under development)](#gear)
-
-	* [Quality control tests CTD](#CTD)
-
-		* [Impossible date test](#date)
-		 
-		* [Impossible location test](#location)
-		 
-		* [Position on land test](#land)
-		 
-		* [Impossible speed test (MOBILE GEAR)](#speed)
-		 
-		* [Global range test](#global)
-		 
-		* [Spike test](#spike)
-		 
-		* [Digit rollover test](#rollover)
-		 
-		* [Stuck value/ flat line test](#stuck)
-		 
-		* [Rate of change test](#roc)
-		 
-		* [Timing/gap test](#timing)
-		 
-		* [Climatology test](#clima)
-		
-		* [Drift test (under development)](#drift)
-
-	* [Quality control tests oxygen/turbidity (under development)](#oxygen)
-
-* [Delayed-mode quality control (under development)](#delayed)
-
-* [Quality control tests (under development)](#test)
-
+* [Real-time Quality control](#real-time-quality-control)
+	* [Fisheries quality control tests](#fisheries-quality-control-tests)
+		* [Platform identification (under development)](#platform-identification-(under-development))
+		* [Vessel ID control (under development)](#vessel-id-control-(under-development))
+		* [Gear type control (under development)](#gear-type-control-(under-development))
+	* [Quality control tests CTD](#quality-control-test-ctd)
+		* [Impossible date test](#impossible-date-test)
+		* [Impossible location test](#impossible-location-test)
+		* [Position on land test](#position-on-land-test)
+		* [Impossible speed test (MOBILE GEAR)](#impossible-speed-test)
+		* [Global range test](#global-range-test)
+		* [Spike test](#spike-test)
+		* [Digit rollover test](#digit-rollover-test)
+		* [Stuck value/ flat line test](#stuck-value/-flat-line-test)
+		* [Rate of change test](#rate-of-change-test)
+		* [Timing/gap test](#timing/gap-test)
+		* [Climatology test](#climatology-test)
+		* [Drift test (under development)](#drift-test-(under-development))
+	* [Quality control tests oxygen/turbidity (under development)](#quality-control-test-oxygen/turbidity-(under-development))
+* [Delayed-mode quality control (under development)](#delayed-mode-quality-control-(under-development))
+* [Quality control tests (under development)](#quality-control-test-(under-development))
 * [References](#references)
 
+<!--te-->
 
-<!-- toc --> 
+
 
 
 ## Introduction
