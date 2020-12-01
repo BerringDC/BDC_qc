@@ -70,7 +70,7 @@ The data collected by fishing vessels of opportunity, i.e. with sensors attached
 
 Quality checks are mainly based on the tests described by IOOS (U.S. Integrated Ocean Observing System, 2020), EuroGOOS (EuroGOOS DATA-/MEQ working group, 2010), the Glider network (U.S. Integrated Ocean Observing System, 2016) and the Argo network (Wong et al., 2020).
 
-The flags used by BDC to indicate QC status are based on existing standards defined by other programs and datasets for oceanographic observations. Flags are indicated in table 1.
+The flags used by BDC to indicate QC status are based on existing standards defined by other programs and datasets for oceanographic observations. Flags are indicated in Table 1.
 
 <div align="center">
 
@@ -82,6 +82,8 @@ The flags used by BDC to indicate QC status are based on existing standards defi
 | 4 | Bad data |
 | 5 | Corrected data |
 | 9 | Missing value |
+
+<sub> Table 1. Quality flags. </sub>
 
 </div>
 
@@ -128,6 +130,8 @@ Check if the vessel is operating in an expected region, definned by the operator
 | **New Zealand** | 160 | 175 | -50 | -30 |
 | **Alaska** | -180 | -125 | 45 | 90 |
 
+<sub> Table 2. Region location. </sub>
+
 </div>
 
 <br>
@@ -147,6 +151,8 @@ The distance travelled by the sensor during the profile is calculated between th
 | Suspect (3) | _Gear type: <br><br> Fixed: distance &gt; 200 meters <br> Mobile: distance &lt;= 200 meters_ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<sub> Table 3. Gear type flags. </sub>
+
 </div>
 
 <br>
@@ -164,6 +170,8 @@ The date of the profile can be no earlier than 01/01/2010 and no later than curr
 | Fail (4) | _Impossible date: <br><br> 01/01/2010 &lt; Date &gt; UTC_ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<sub> Tablel 4. Impossible date flags. </sub>
+
 </div>
 
 <br>
@@ -179,6 +187,8 @@ This test controls whether the geographic location is reasonable, based on the g
 | Fail (4) | _Impossible location: <br><br> -180 &lt; longitude &gt; 180 <br> -90 &lt; latitude &gt; 90_ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<sub> Table 5. Impossible location flags. </sub>
+
 </div>
 
 <br>
@@ -193,6 +203,8 @@ This test requires that the observation latitude and longitude from a float prof
 | :---: | :---: |
 | Fail (4) | _Measurement is on land._ |
 | Pass (1) | _Applies for test pass condition._ |
+
+<sub> Table 6. Position on land flags. </sub>
 
 </div>
 
@@ -210,6 +222,8 @@ This test is helpful for determining if there is an error in merging the sensor 
 | :---: | :---: |
 | Fail (4) | _Speed is too high for mobile gear fishing. <br><br> Vessel speed &gt; 4.12 ms−1 (8 knots)_ |
 | Pass (1) | _Applies for test pass condition._ |
+
+<sub> Table 7. Impossible speed flags. </sub>
 
 </div>
 
@@ -234,9 +248,11 @@ This test applies a gross filter on the observed values of pressure, temperature
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Measurement outside sensor operating range <br><br> -5 &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> 2 &lt; Salinity &gt; 42 PSU_ |
-| Suspect (3) | -5 &lt;= Pressure &lt; 0<br> Pressure &gt; Max sensor depth + 10% |
+| Fail (4) | _Measurement outside sensor operating range <br><br> NKE sensors <br> -5 &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> 2 &lt; Salinity &gt; 42 PSU <br> ZebraTech sensors <br> -5 &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> Lowell sensors <br> -5 &lt; Pressure <br> -20 &lt; Temperature &gt; 50 °C_ |
+| Suspect (3) | -5 &lt;= Pressure &lt; 0<br> Pressure &gt; Max sensor depth + 10% or 50% (ZebraTech) |
 | Pass (1) | _Applies for test pass condition._ |
+
+<sub> Table 8. Global range flags. </sub>
 
 </div>
 
@@ -257,6 +273,8 @@ Cut-off values are based on (Wong et al., 2020), and V2 will be flagged based on
 | Fail (4) | _Measurement differs significantly from its neighbours <br><br> Pressure &lt; 500 dbar:<br> Test value T &gt; 6.0 °C <br> Test value S &gt; 0.9 PSU <br><br> Pressure &gt; = 500 dbar: <br> Test value T &gt; 2.0°C <br>Test value S &gt; 0.3 PSU_ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<sub> Table 9. Spike flags. </sub>
+
 </div>
 
 <br>
@@ -271,6 +289,8 @@ Here we compare the measurements at the end of the profile to the adjacent measu
 | :---: | :---: |
 | Fail (4) | _Measurement differs significantly from its neighbours <br><br> T2 - T1 &gt; 1.0 °C_ |
 | Pass (1) | _Applies for test pass condition._ |
+
+<sub> Table 10. Digit rollover flags. </sub>
 
 </div>
 
@@ -287,6 +307,8 @@ It is possible that, when sensors fail, continuously repeated observations of th
 | Fail (4) | _The five most recent observations are equal <br><br> Tolerance values: <br> Temperature: 0.05 °C <br> Salinity: 0.05 PSU <br> Pressure: 0.5 dbar_ |
 | Suspect (3) | _The three most recent observations are equal_ |
 | Pass (1) | _Applies for test pass condition._ |
+
+<sub> Table 11. Flat line flags. </sub>
 
 </div>
 
@@ -305,11 +327,13 @@ This test needs to find a balance between setting a threshold too low, triggerin
 | Suspect (3) | _The rate of change exceeds the selected threshold._ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<sub> Table 12. Rate of change flags. </sub>
+
 </div>
 
 <br>
 
-#### Timing/gap test
+#### Timing/ gap test
 
 <div align="center">
 
@@ -318,6 +342,8 @@ This test controls whether the most recent measurement has been received within 
 | :---: | :---: |
 | Suspect (3) | _Check for the arrival of data <br><br> Data didn&#39;t come in as expected: NOW – TIM\_STMP &gt; TIM\_INC_ |
 | Pass (1) | _Applies for test pass condition._ |
+
+<sub> Table 13. Timing flags. </sub>
 
 </div>
 
@@ -373,13 +399,15 @@ Seasonal limits per area still have to be defined, in the meantime we take min a
 | Suspect (3) | _Measurement outside climatology range <br><br> Seas\_min\_T &lt; Temperature&gt; Seas\_max\_T <br> Seas\_min\_S &lt; Salinity &gt; Seas\_max\_S_ |
 | Pass (1) | _Applies for test pass condition._ |
 
+<sub> Table 14. Climatology flags. </sub>
+
 </div>
 
 <br>
 
 #### Drift test (under development)
 
-### Quality control tests oxygen/turbidity (under development)
+### Quality control tests oxygen/ turbidity (under development)
 
 ## Delayed-mode quality control (under development)
 
