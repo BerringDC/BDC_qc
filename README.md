@@ -184,7 +184,7 @@ This test controls whether the geographic location is reasonable, based on the g
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Impossible location: <br><br> -180 &lt; longitude &gt; 180 <br> -90 &lt; latitude &gt; 90_ |
+| Fail (4) | _Impossible location: <br><br> -180º &lt; longitude &gt; 180º <br> -90º &lt; latitude &gt; 90º_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 <sub> Table 5. Impossible location flags. </sub>
@@ -234,11 +234,11 @@ This test is helpful for determining if there is an error in merging the sensor 
 Gross filter on the observed values of pressure, temperature and salinity based on the sensor ranges (NKE TD, NKE CTD and ZebraTech Moana TD).
 
 - [Zebra-Tech](https://zebra-tech.co.nz/moana)
-- [NKE CTD](https://nke-instrumentation.com/ctd)
-- [NKE TD](https://nke-instrumentation.com/td)
+- [NKE CTD](https://nke-instrumentation.com/produit/wisens-ctd/)
+- [NKE TD](https://nke-instrumentation.com/produit/wisens-td/)
 - [Hobo](https://www.onsetcomp.com)
 - [Vemco_minilog](https://www.vemco.com)
-- [Marport](https://www.marport.com)
+- [Marport](http://www.marport.com)
 - [Lowell TD](https://lowellinstruments.com)
 
 
@@ -248,8 +248,8 @@ This test applies a gross filter on the observed values of pressure, temperature
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Measurement outside sensor operating range <br><br> <b> NKE sensors </b> <br> -5 &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> 2 &lt; Salinity &gt; 42 PSU <br> <br> <b> ZebraTech sensors </b> <br> -5 &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> <br> <b> Lowell sensors </b> <br> -5 &lt; Pressure <br> -20 &lt; Temperature &gt; 50 °C_ |
-| Suspect (3) | -5 &lt;= Pressure &lt; 0<br> Pressure &gt; Max sensor depth + 10% or 50% (ZebraTech) |
+| Fail (4) | _Measurement outside sensor operating range <br><br> <b> NKE sensors </b> <br> -5 dbar &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> 2 &lt; Salinity &gt; 42 PSU <br> <br> <b> ZebraTech sensors </b> <br> -5 dbar &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> <br> <b> Lowell sensors </b> <br> -5 dbar &lt; Pressure <br> -5 &lt; Temperature &gt; 50 °C <br> <br> <b> Marport sensors </b> <br> -5 dbar &lt; Pressure <br> -5 &lt; Temperature &gt; 25 °C <br> <br> <b> Hobo/Vemco sensors </b> <br> -5 dbar &lt; Pressure <br> -20 &lt; Temperature &gt; 50 °C_ |
+| Suspect (3) | -5 &lt;= Pressure &lt; 0 dbar <br> Pressure &gt; Max sensor depth + 10% or 50% (ZebraTech) |
 | Pass (1) | _Applies for test pass condition._ |
 
 <sub> Table 8. Global range flags. </sub>

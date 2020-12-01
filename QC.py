@@ -145,6 +145,12 @@ class QC(object):
         elif self.sensor_type == 'Lowell':
             min_temp, max_temp = -5, 50
             max_press = 1000 * 1.5
+        elif self.sensor_type == 'Marport':
+            min_temp, max_temp = -5, 25
+            max_press = 600 * 1.1
+        elif self.sensor_type == 'Hobo':
+            min_temp, max_temp = -20, 50
+            max_press = 600 * 1.5
 
         self.df['flag_global_range'] = 1
         self.df.loc[(self.df['PRESSURE'] >= -5) & (self.df['PRESSURE'] < 0), ['flag_global_range', 'flag']] = 3
