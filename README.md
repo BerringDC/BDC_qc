@@ -248,7 +248,7 @@ This test applies a gross filter on the observed values of pressure, temperature
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Measurement outside sensor operating range <br><br> NKE sensors <br> -5 &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> 2 &lt; Salinity &gt; 42 PSU <br> ZebraTech sensors <br> -5 &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> Lowell sensors <br> -5 &lt; Pressure <br> -20 &lt; Temperature &gt; 50 °C_ |
+| Fail (4) | _Measurement outside sensor operating range <br><br> <b> NKE sensors </b> <br> -5 &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> 2 &lt; Salinity &gt; 42 PSU <br> <br> <b> ZebraTech sensors </b> <br> -5 &lt; Pressure <br> -2 &lt; Temperature &gt; 35 °C <br> <br> <b> Lowell sensors </b> <br> -5 &lt; Pressure <br> -20 &lt; Temperature &gt; 50 °C_ |
 | Suspect (3) | -5 &lt;= Pressure &lt; 0<br> Pressure &gt; Max sensor depth + 10% or 50% (ZebraTech) |
 | Pass (1) | _Applies for test pass condition._ |
 
