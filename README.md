@@ -1,4 +1,4 @@
-
+<div align="center">
 
 # BDC_QC
 Collection of manuals and scripts to assist in automated quality assurance and quality control for oceanographic data collected via fishing gear as a platform.
@@ -6,8 +6,6 @@ Collection of manuals and scripts to assist in automated quality assurance and q
 <br>
 
 ## Manual
-
-<p align="center">
 
 Fishing gear as a platform for sensors: Implementation of real-time quality control of in-situ temperature and salinity data collected via fishing gear
 
@@ -345,4 +343,4 @@ U.S. Integrated Ocean Observing System (2016) Manual for Quality Control of Temp
 
 EuroGOOS DATA-MEQ working group (2010). Recommendations for in-situ data Near Real Time Quality Control. https://doi.org/10.13155/36230
 
-</p>
+</div>
