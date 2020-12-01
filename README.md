@@ -1,4 +1,4 @@
-<div align="center">
+<div align="justify">
 
 # BDC_QC
 Collection of manuals and scripts to assist in automated quality assurance and quality control for oceanographic data collected via fishing gear as a platform.
