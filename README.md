@@ -219,13 +219,13 @@ This test is helpful for determining if there is an error in merging the sensor 
 
 Gross filter on the observed values of pressure, temperature and salinity based on the sensor ranges (NKE TD, NKE CTD and ZebraTech Moana TD).
 
-- [Zebra-Tech](zebra-tech.co.nz/moana)
-- [NKE CTD](nke-instrumentation.com/ctd)
-- [NKE TD](nke-instrumentation.com/td)
-- [Hobo](www.onsetcomp.com)
-- [Vemco_minilog](www.vemco.com)
-- [Marport](www.marport.com)
-- [Lowell TD](lowellinstruments.com)
+- [Zebra-Tech](https://zebra-tech.co.nz/moana)
+- [NKE CTD](https://nke-instrumentation.com/ctd)
+- [NKE TD](https://nke-instrumentation.com/td)
+- [Hobo](https://www.onsetcomp.com)
+- [Vemco_minilog](https://www.vemco.com)
+- [Marport](https://www.marport.com)
+- [Lowell TD](https://lowellinstruments.com)
 
 
 This test applies a gross filter on the observed values of pressure, temperature and salinity. Action: Values that fail the test should be flagged as bad data (4).
