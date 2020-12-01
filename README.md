@@ -48,7 +48,6 @@ Authors: Berthe Vastenhoud, Carles Castro Muniain \& Cooper Van Vranken
 
 <!--te-->
 
-
 <br>
 
 ## Introduction
