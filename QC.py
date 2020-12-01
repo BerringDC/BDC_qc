@@ -6,15 +6,19 @@ from global_land_mask import globe
 #library to calculate the speed
 import geopy.distance
 
-d_regions = {'Flid': 'North Sea', 'LofotonAA': 'Atlantic', 'Pedro': 'North Sea'}
 
 class QC(object):
-    def __init__(self, df, vessel, gear_type, zone):
+    def __init__(self, df, vessel, gear_type, zone, sensor_type):
+        self.vessel = vessel
+        self.gear = gear_type
+        self.zone = zone
+        self.sensor_type = sensor_type
+        self.d_regions = {'Flid': 'North Sea', 'LofotonAA': 'Atlantic', 'Pedro': 'North Sea'}
         self.df = df
         self.df['DATETIME'] = pd.to_datetime(self.df['DATETIME'])
         self.df['flag'] = 1
-        self.regions(vessel, d_regions)
-        self.gear_type(gear_type)
+        self.regions()
+        self.gear_type()
         self.impossible_date()
         self.impossible_location()
         self.position_on_land()
@@ -25,14 +29,14 @@ class QC(object):
         self.stuck()
         self.rate_of_change()
         self.timing_gap()
-        self.climatology(zone)
+        self.climatology()
         self.drift()
 
     # 1. Platform identification, from line 93 load_cloud.py
 
     # 2. Vessel ID control
     # d represent a dictionary where the keys are the vessels and the values represent the pertinent region
-    def regions(self, vessel, d):
+    def regions(self):
         self.df['flag_vessel_region'] = 1
         region = 'Unknown'
         max_lat = self.df['LATITUDE'].max()
@@ -52,13 +56,13 @@ class QC(object):
         elif -180 <= max_lon <= -125 and 45 <= max_lat <= 90 and -180 <= min_lon <= -125 and 45 <= min_lat <= 90:
             region = 'Alaska'
 
-        if d[vessel] != region:
+        if self.d_regions[self.vessel] != region:
             self.df['flag_vessel_region'] = 3
             self.df['flag'] = 3
 
     # 3. Gear type control
     # Still some thoughts need to be applied
-    def gear_type(self, gear):
+    def gear_type(self):
         # gt = 0 = fixed
         # gt = 1 = mobile
         self.df['flag_gear_type'] = 1
@@ -72,7 +76,7 @@ class QC(object):
 
         gt = 1 if d > 200 else 0
 
-        if (gt == 1 and gear == 'Fixed') or (gt == 0 and gear == 'Mobile'):
+        if (gt == 1 and self.gear == 'Fixed') or (gt == 0 and self.gear == 'Mobile'):
             self.df['flag_gear_type'] = 3
             self.df['flag'] = 3
 
@@ -128,12 +132,27 @@ class QC(object):
     # 8. Global range test
     # Gross filter on the observed values of pressure, temperature and salinity
     def global_range(self):
+        max_press, min_temp, max_temp, min_sal, max_sal = None, None, None, None, None
+        if self.sensor_type == 'NKE':
+            min_temp, max_temp = -2, 35
+            max_press = 1000 * 1.1
+            if 'SALINITY' in self.df:
+                min_sal, max_sal = 2, 42
+                max_press = 300 * 1.1
+        elif self.sensor_type == 'ZebraTech':
+            min_temp, max_temp = -2, 35
+            max_press = 1000 * 1.1
+        elif self.sensor_type == 'Lowell':
+            min_temp, max_temp = -5, 50
+            max_press = 1000 * 1.5
+
         self.df['flag_global_range'] = 1
         self.df.loc[(self.df['PRESSURE'] >= -5) & (self.df['PRESSURE'] < 0), ['flag_global_range', 'flag']] = 3
+        self.df.loc[self.df['PRESSURE'] > max_press, ['flag_global_range', 'flag']] = 3
         self.df.loc[(self.df['PRESSURE'] < -5), ['flag_global_range', 'flag']] = 4
-        self.df.loc[((self.df['TEMPERATURE'] < -2) | (self.df['TEMPERATURE'] > 35)), ['flag_global_range', 'flag']] = 4
+        self.df.loc[((self.df['TEMPERATURE'] < min_temp) | (self.df['TEMPERATURE'] > max_temp)), ['flag_global_range', 'flag']] = 4
         if 'SALINITY' in self.df:
-            self.df.loc[((self.df['SALINITY'] < 2) | (self.df['SALINITY'] > 42)), ['flag_global_range', 'flag']] = 4
+            self.df.loc[((self.df['SALINITY'] < min_sal) | (self.df['SALINITY'] > max_sal)), ['flag_global_range', 'flag']] = 4
 
     # 9. Spike test
     def spike(self):
@@ -307,7 +326,7 @@ class QC(object):
 
     # Temp and sal
 
-    def climatology(self, zone):
+    def climatology(self):
         # list contains first tuple (Temp) and second tuple (Sal)
         d = {'Red Sea': [(21.7, 40), (2, 41)], 'Mediterranean Sea': [(10, 40), (2, 40)],
              'North Western Shelves': [(-2, 24), (0, 37)], 'South West Shelves': [(-2, 30), (0, 38)],
@@ -315,11 +334,11 @@ class QC(object):
 
         self.df['flag_clima'] = 1
         self.df.loc[
-            ((self.df['TEMPERATURE'] < d[zone][0][0]) | (self.df['TEMPERATURE'] > d[zone][0][1])), 'flag_clima'] = 3
+            ((self.df['TEMPERATURE'] < d[self.zone][0][0]) | (self.df['TEMPERATURE'] > d[self.zone][0][1])), 'flag_clima'] = 3
 
         if 'SALINITY' in self.df:
             self.df.loc[
-                ((self.df['SALINITY'] < d[zone][1][0]) | (self.df['SALINITY'] > d[zone][1][1])), 'flag_clima'] = 3
+                ((self.df['SALINITY'] < d[self.zone][1][0]) | (self.df['SALINITY'] > d[self.zone][1][1])), 'flag_clima'] = 3
 
     def drift(self):
         # time and location boundaries
