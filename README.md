@@ -26,9 +26,9 @@ Authors: Berthe Vastenhoud, Carles Castro Muniain \& Cooper Van Vranken
 * [Real-time Quality control](#real-time-quality-control)
 	* [Fisheries quality control tests](#fisheries-quality-control-tests)
 		* [Platform identification (under development)](#platform-identification-under-development)
-		* [Vessel ID control (under development)](#vessel-id-control-under-development)
-		* [Gear type control (under development)](#gear-type-control-under-development)
-	* [Quality control tests CTD](#quality-control-test-ctd)
+		* [Vessel ID control test](#vessel-id-control-test)
+		* [Gear type control test](#gear-type-control-test)
+	* [Quality control tests CTD](#quality-control-tests-ctd)
 		* [Impossible date test](#impossible-date-test)
 		* [Impossible location test](#impossible-location-test)
 		* [Position on land test](#position-on-land-test)
@@ -116,9 +116,9 @@ Check if there is an unknown sensor ID/Vessel ID
 
 <br>
 
-#### Vessel ID control (under development)
+#### Vessel ID control test
 
-Check if the vessel is operating in an expected region, definned by the operator. Action: Values that fail the test should be flagged as suspect data (3).
+Check if the vessel is operating in an expected region, defined by the operator. Action: Values that fail the test should be flagged as suspect data (3).
 
 <div align="center">
 
@@ -136,7 +136,7 @@ Check if the vessel is operating in an expected region, definned by the operator
 
 <br>
 
-#### Gear type control (under development)
+#### Gear type control test
 
 Check if the gear type assigned is correct.
 
