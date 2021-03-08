@@ -161,7 +161,7 @@ The distance travelled by the sensor during the profile is calculated between th
 
 #### Impossible date test
 
-The date of the profile can be no earlier than 01/01/2010 and no later than current date in UTC. Action: Values that fail the test should be falgged as bad data(4)
+The date of the profile can be no earlier than 01/01/2010 and no later than current date in UTC. Action: Values that fail the test should be flagged as bad data (4).
 
 <div align="center">
 
@@ -178,7 +178,7 @@ The date of the profile can be no earlier than 01/01/2010 and no later than curr
 
 #### Impossible location test
 
-This test controls whether the geographic location is reasonable, based on the global limits for longitude and latitude. Action: Values that fail the test should be falgged as bad data(4)
+This test controls whether the geographic location is reasonable, based on the global limits for longitude and latitude. Action: Values that fail the test should be flagged as bad data (4).
 
 <div align="center">
 
@@ -195,7 +195,7 @@ This test controls whether the geographic location is reasonable, based on the g
 
 #### Position on land test
 
-This test requires that the observation latitude and longitude from a float profile be located in an ocean. Here we use a 5 minute bathymetry file (ETOPO5/TerrainBase) downloaded from [http://www.ngdc.noaa.gov/mgg/global/etopo5.html](http://www.ngdc.noaa.gov/mgg/global/etopo5.html). Action: Values that fail the test should be flagged as bad data (4).
+This test requires that the observation latitude and longitude from a float profile be located in an ocean. Here we use a 5 minutes bathymetry file (ETOPO5/TerrainBase) downloaded from [http://www.ngdc.noaa.gov/mgg/global/etopo5.html](http://www.ngdc.noaa.gov/mgg/global/etopo5.html). Action: Values that fail the test should be flagged as bad data (4).
 
 <div align="center">
 
