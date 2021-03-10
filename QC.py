@@ -2,41 +2,43 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 #library to check if it's land or not
-from global_land_mask import globe
+# from global_land_mask import globe
 #library to calculate the speed
 import geopy.distance
+import os
 
+d_regions = {'Flid': 'North Sea', 'LofotonAA': 'Atlantic', 'Belgium boat': 'North Sea', 'Dutch boat': 'North Sea', 'Lisa_Ann3': 'Atlantic'}
 
 class QC(object):
     def __init__(self, df, vessel, gear_type, zone, sensor_type):
+        self.df = df
         self.vessel = vessel
         self.gear = gear_type
         self.zone = zone
         self.sensor_type = sensor_type
-        self.d_regions = {'Flid': 'North Sea', 'LofotonAA': 'Atlantic', 'Pedro': 'North Sea'}
-        self.df = df
         self.df['DATETIME'] = pd.to_datetime(self.df['DATETIME'])
         self.df['flag'] = 1
-        self.regions()
-        self.gear_type()
+        self.regions(vessel, d_regions)
+        self.gear_type(gear_type)
         self.impossible_date()
         self.impossible_location()
-        self.position_on_land()
-        self.impossible_speed()
+        # self.position_on_land()
         self.global_range()
         self.spike()
         self.rollover()
         self.stuck()
         self.rate_of_change()
         self.timing_gap()
-        self.climatology()
+        self.climatology(zone)
         self.drift()
+        self.impossible_speed()
+
 
     # 1. Platform identification, from line 93 load_cloud.py
 
     # 2. Vessel ID control
     # d represent a dictionary where the keys are the vessels and the values represent the pertinent region
-    def regions(self):
+    def regions(self, vessel, d):
         self.df['flag_vessel_region'] = 1
         region = 'Unknown'
         max_lat = self.df['LATITUDE'].max()
@@ -56,13 +58,13 @@ class QC(object):
         elif -180 <= max_lon <= -125 and 45 <= max_lat <= 90 and -180 <= min_lon <= -125 and 45 <= min_lat <= 90:
             region = 'Alaska'
 
-        if self.d_regions[self.vessel] != region:
+        if d[vessel] != region:
             self.df['flag_vessel_region'] = 3
             self.df['flag'] = 3
 
     # 3. Gear type control
     # Still some thoughts need to be applied
-    def gear_type(self):
+    def gear_type(self, gear):
         # gt = 0 = fixed
         # gt = 1 = mobile
         self.df['flag_gear_type'] = 1
@@ -76,7 +78,7 @@ class QC(object):
 
         gt = 1 if d > 200 else 0
 
-        if (gt == 1 and self.gear == 'Fixed') or (gt == 0 and self.gear == 'Mobile'):
+        if (gt == 1 and gear == 'Fixed') or (gt == 0 and gear == 'Mobile'):
             self.df['flag_gear_type'] = 3
             self.df['flag'] = 3
 
@@ -112,22 +114,25 @@ class QC(object):
 
     def impossible_speed(self):
         self.df['flag_speed'] = 1
-        self.df['speed'] = 0
+        if 'speed' not in self.df.columns:
+            self.df['speed'] = 10
+            if len(self.df) != 0:
+                for i in self.df.iloc[:-1].index:
+                    time1 = self.df.DATETIME.iloc[i]
+                    time2 = self.df.DATETIME.iloc[i + 1]
+                    coords_1 = self.df.LATITUDE.iloc[i], self.df.LONGITUDE.iloc[i]
+                    coords_2 = self.df.LATITUDE.iloc[i + 1], self.df.LONGITUDE.iloc[i + 1]
+                    d = geopy.distance.geodesic(coords_1, coords_2).m
+                    t = (time2 - time1).seconds
+                    self.df['speed'].iloc[i] = d / t if t != 0 else None
+        self.parse_segments()
         self.df.reset_index(drop=True, inplace=True)
         if len(self.df) != 0:
-            for i in self.df.iloc[:-1].index:
-                time1 = self.df.DATETIME.iloc[i]
-                time2 = self.df.DATETIME.iloc[i + 1]
-                coords_1 = self.df.LATITUDE.iloc[i], self.df.LONGITUDE.iloc[i]
-                coords_2 = self.df.LATITUDE.iloc[i + 1], self.df.LONGITUDE.iloc[i + 1]
-                d = geopy.distance.geodesic(coords_1, coords_2).m
-                t = (time2 - time1).seconds
-                self.df['speed'].iloc[i] = d / t if t != 0 else None
-            if self.df['speed'].mean() != 0:
-                self.df['flag_speed'] = 1
-                self.df.loc[(self.df['speed'] > 4.12), ['flag_speed', 'flag']] = 4
+            if self.df[self.df['type'] == 1]['speed'].min() > 2 and self.df[self.df['type'] == 2]['speed'].min() > 2:
+                self.df['flag_speed'] = 4
+                self.df['flag'] = 4
+            self.df.loc[(self.df['speed'] > 4.12), ['flag_speed', 'flag']] = 4
             # self.df = self.df[self.df['flag_speed'] == 1]
-            self.df = self.df.drop(columns=['speed'])
 
     # 8. Global range test
     # Gross filter on the observed values of pressure, temperature and salinity
@@ -145,12 +150,6 @@ class QC(object):
         elif self.sensor_type == 'Lowell':
             min_temp, max_temp = -5, 50
             max_press = 1000 * 1.5
-        elif self.sensor_type == 'Marport':
-            min_temp, max_temp = -5, 25
-            max_press = 600 * 1.1
-        elif self.sensor_type == 'Hobo':
-            min_temp, max_temp = -20, 50
-            max_press = 600 * 1.5
 
         self.df['flag_global_range'] = 1
         self.df.loc[(self.df['PRESSURE'] >= -5) & (self.df['PRESSURE'] < 0), ['flag_global_range', 'flag']] = 3
@@ -332,7 +331,7 @@ class QC(object):
 
     # Temp and sal
 
-    def climatology(self):
+    def climatology(self, zone):
         # list contains first tuple (Temp) and second tuple (Sal)
         d = {'Red Sea': [(21.7, 40), (2, 41)], 'Mediterranean Sea': [(10, 40), (2, 40)],
              'North Western Shelves': [(-2, 24), (0, 37)], 'South West Shelves': [(-2, 30), (0, 38)],
@@ -340,11 +339,11 @@ class QC(object):
 
         self.df['flag_clima'] = 1
         self.df.loc[
-            ((self.df['TEMPERATURE'] < d[self.zone][0][0]) | (self.df['TEMPERATURE'] > d[self.zone][0][1])), 'flag_clima'] = 3
+            ((self.df['TEMPERATURE'] < d[zone][0][0]) | (self.df['TEMPERATURE'] > d[zone][0][1])), 'flag_clima'] = 3
 
         if 'SALINITY' in self.df:
             self.df.loc[
-                ((self.df['SALINITY'] < d[self.zone][1][0]) | (self.df['SALINITY'] > d[self.zone][1][1])), 'flag_clima'] = 3
+                ((self.df['SALINITY'] < d[zone][1][0]) | (self.df['SALINITY'] > d[zone][1][1])), 'flag_clima'] = 3
 
     def drift(self):
         # time and location boundaries
