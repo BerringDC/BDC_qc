@@ -38,6 +38,7 @@ Authors: Berthe Vastenhoud, Carles Castro Muniain \& Cooper Van Vranken
 		* [Digit rollover test](#digit-rollover-test)
 		* [Stuck value / flat line test](#stuck-value-flat-line-test)
 		* [Rate of change test](#rate-of-change-test)
+		* [Mud test](#mud-test)
 		* [Timing / gap test](#timing-gap-test)
 		* [Climatology test](#climatology-test)
 		* [Drift test (under development)](#drift-test-under-development)
@@ -333,6 +334,23 @@ This test needs to find a balance between setting a threshold too low, triggerin
 
 <br>
 
+#### Mud test
+
+This test is applied only in the Up segment. Controls whether the temperature sensor has some mud biasing the measurements once hauled. Values are rolled by 10 measurements and flags observation if rolled temperature is lower than 0.005ºC.	Action: Values that fail the test should be flagged as bad data (4).
+
+<div align="center">
+
+| **Flags** | **Description** |
+| :---: | :---: |
+| Fail (4) | _Measurement is barely invariant <br> Rolled temperature: 0.005 °C_ |
+| Pass (1) | _Applies for test pass condition._ |
+
+<sub> Table 13. Mud flags. </sub>
+
+</div>
+
+<br>
+
 #### Timing/ gap test
 
 <div align="center">
@@ -343,7 +361,7 @@ This test controls whether the most recent measurement has been received within 
 | Suspect (3) | _Check for the arrival of data <br><br> Data didn&#39;t come in as expected: NOW – TIM\_STMP &gt; TIM\_INC_ |
 | Pass (1) | _Applies for test pass condition._ |
 
-<sub> Table 13. Timing flags. </sub>
+<sub> Table 14. Timing flags. </sub>
 
 </div>
 
@@ -399,7 +417,7 @@ Seasonal limits per area still have to be defined, in the meantime we take min a
 | Suspect (3) | _Measurement outside climatology range <br><br> Seas\_min\_T &lt; Temperature&gt; Seas\_max\_T <br> Seas\_min\_S &lt; Salinity &gt; Seas\_max\_S_ |
 | Pass (1) | _Applies for test pass condition._ |
 
-<sub> Table 14. Climatology flags. </sub>
+<sub> Table 15. Climatology flags. </sub>
 
 </div>
 

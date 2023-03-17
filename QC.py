@@ -7,8 +7,6 @@ from datetime import datetime
 import geopy.distance
 import os
 
-d_regions = {'Flid': 'North Sea', 'LofotonAA': 'Atlantic', 'Belgium boat': 'North Sea', 'Dutch boat': 'North Sea', 'Lisa_Ann3': 'Atlantic'}
-
 class QC(object):
     def __init__(self, df, vessel, gear_type, zone, sensor_type):
         self.df = df
@@ -18,11 +16,12 @@ class QC(object):
         self.sensor_type = sensor_type
         self.df['DATETIME'] = pd.to_datetime(self.df['DATETIME'])
         self.df['flag'] = 1
-        self.regions(vessel, d_regions)
+        self.regions()
         self.gear_type(gear_type)
         self.impossible_date()
         self.impossible_location()
         # self.position_on_land()
+        self.impossible_speed()
         self.global_range()
         self.spike()
         self.rollover()
@@ -31,14 +30,13 @@ class QC(object):
         self.timing_gap()
         self.climatology(zone)
         self.drift()
-        self.impossible_speed()
-
+        self.mud()
 
     # 1. Platform identification, from line 93 load_cloud.py
 
     # 2. Vessel ID control
     # d represent a dictionary where the keys are the vessels and the values represent the pertinent region
-    def regions(self, vessel, d):
+    def regions(self):
         self.df['flag_vessel_region'] = 1
         region = 'Unknown'
         max_lat = self.df['LATITUDE'].max()
@@ -47,18 +45,30 @@ class QC(object):
         min_lon = self.df['LONGITUDE'].min()
 
         if -60 <= max_lon <= -15 and 55 <= max_lat <= 90 and -60 <= min_lon <= -15 and 55 <= min_lat <= 90:
-            region = 'Greenland'
+            region = ['Greenland']
         elif -15 <= max_lon <= 30 and 45 <= max_lat <= 60 and -15 <= min_lon <= 30 and 45 <= min_lat:
-            region = 'North Sea'
-        elif -75 <= max_lon <= 30 and 55 <= max_lat <= 90 and -75 <= min_lon <= 30 and 55 <= min_lat <= 90:
-            region = 'Atlantic'
+            region = ['North Sea', 'Atlantic']
+        elif -75 <= max_lon <= 30 and 0 <= max_lat <= 90 and -75 <= min_lon <= 30 and 0 <= min_lat <= 90:
+            region = ['Atlantic']
         elif (160 <= max_lon <= 180 or 0 <= max_lon <= 5) and -50 <= max_lat <= -30 and (
                 160 <= min_lon <= 180 or 0 <= min_lon <= 5) and -50 <= min_lat <= -30:
-            region = 'New Zeland'
+            region = ['New Zeland']
+        elif 30 <= max_lon <= 45 and 10 <= max_lat <= 45 and 30 <= min_lon <= 45 and 10 <= min_lat <= 45:
+            region = ['Red Sea']
+        elif -5 <= max_lon <= 40 and 25 <= max_lat <= 45 and -5 <= min_lon <= 40 and 25 <= min_lat <= 45:
+            region = ['Mediterranean Sea']
         elif -180 <= max_lon <= -125 and 45 <= max_lat <= 90 and -180 <= min_lon <= -125 and 45 <= min_lat <= 90:
-            region = 'Alaska'
+            region = ['Alaska']
+        elif -180 <= max_lon <= -70 and 0 <= max_lat <= 60 and -180 <= min_lon <= -70 and 0 <= min_lat <= 60:
+            region = ['Pacific']
+        elif -100 <= max_lon <= -70 and 15 <= max_lat <= 35 and -100 <= min_lon <= -70 and 15 <= min_lat <= 35:
+            region = ['Gulf of Mexico']
+        # elif -180 <= max_lon <= -125 and 45 <= max_lat <= 90 and -180 <= min_lon <= -125 and 45 <= min_lat <= 90:
+        #     region = ['South West Shelves']
+        # elif -180 <= max_lon <= -125 and 45 <= max_lat <= 90 and -180 <= min_lon <= -125 and 45 <= min_lat <= 90:
+        #     region = ['Artic Sea']
 
-        if d[vessel] != region:
+        if self.zone not in region:
             self.df['flag_vessel_region'] = 3
             self.df['flag'] = 3
 
@@ -114,25 +124,12 @@ class QC(object):
 
     def impossible_speed(self):
         self.df['flag_speed'] = 1
-        if 'speed' not in self.df.columns:
-            self.df['speed'] = 10
-            if len(self.df) != 0:
-                for i in self.df.iloc[:-1].index:
-                    time1 = self.df.DATETIME.iloc[i]
-                    time2 = self.df.DATETIME.iloc[i + 1]
-                    coords_1 = self.df.LATITUDE.iloc[i], self.df.LONGITUDE.iloc[i]
-                    coords_2 = self.df.LATITUDE.iloc[i + 1], self.df.LONGITUDE.iloc[i + 1]
-                    d = geopy.distance.geodesic(coords_1, coords_2).m
-                    t = (time2 - time1).seconds
-                    self.df['speed'].iloc[i] = d / t if t != 0 else None
-        self.parse_segments()
+        self.df['speed'] = 0
         self.df.reset_index(drop=True, inplace=True)
         if len(self.df) != 0:
-            if self.df[self.df['type'] == 1]['speed'].min() > 2 and self.df[self.df['type'] == 2]['speed'].min() > 2:
-                self.df['flag_speed'] = 4
-                self.df['flag'] = 4
             self.df.loc[(self.df['speed'] > 4.12), ['flag_speed', 'flag']] = 4
             # self.df = self.df[self.df['flag_speed'] == 1]
+            self.df = self.df.drop(columns=['speed'])
 
     # 8. Global range test
     # Gross filter on the observed values of pressure, temperature and salinity
@@ -144,7 +141,7 @@ class QC(object):
             if 'SALINITY' in self.df:
                 min_sal, max_sal = 2, 42
                 max_press = 300 * 1.1
-        elif self.sensor_type == 'ZebraTech':
+        elif self.sensor_type == 'Moana' or self.sensor_type == 'ZebraTech':
             min_temp, max_temp = -2, 35
             max_press = 1000 * 1.1
         elif self.sensor_type == 'Lowell':
@@ -335,7 +332,8 @@ class QC(object):
         # list contains first tuple (Temp) and second tuple (Sal)
         d = {'Red Sea': [(21.7, 40), (2, 41)], 'Mediterranean Sea': [(10, 40), (2, 40)],
              'North Western Shelves': [(-2, 24), (0, 37)], 'South West Shelves': [(-2, 30), (0, 38)],
-             'Artic Sea': [(-1.92, 25), (2, 40)], 'Atlantic': [(2, 40), (2, 38)], 'North Sea': [(2, 40), (2, 38)]}
+             'Artic Sea': [(-1.92, 25), (2, 40)], 'Atlantic': [(2, 40), (2, 38)], 'North Sea': [(2, 40), (2, 38)],
+             'Alaska': [(-1.92, 25), (0, 40)], 'Pacific': [(2, 40), (2, 38)], 'Gulf of Mexico': [(2, 40), (2, 38)]}
 
         self.df['flag_clima'] = 1
         self.df.loc[
@@ -362,6 +360,45 @@ class QC(object):
                     sal2 = df_bottom['SALINITY'].iloc[-1]
                     if abs(sal1 - sal2) > 8:
                         self.df.loc[:, ['flag_drift', 'flag']] = 3
+
+    def mud(self):
+        self.df['flag_mud'] = 1
+        self.parse_segments()
+
+        self.df['TEMP_diff'] = self.df['TEMPERATURE'] - self.df['TEMPERATURE'].shift(1)
+
+        df2 = self.df[self.df['type'] == 2]
+        df1 = self.df[self.df['type'] == 1]
+
+        if self.df['PRESSURE'].max() < 100:
+            return
+
+        df1n = df1[df1['PRESSURE'] > (df1['PRESSURE'].max() / 2)]
+        df2n = df2[df2['PRESSURE'] > (df2['PRESSURE'].max() / 2)]
+
+        df1n['rolled_temp'] = df1n['TEMP_diff'].rolling(10, center=True, min_periods=1).mean()
+        df2n['rolled_temp'] = df2n['TEMP_diff'].rolling(10, center=True, min_periods=1).mean()
+
+        if len(df1n[abs(df1n['rolled_temp']) < 0.005]):
+            if len(df2n[abs(df2n['rolled_temp']) < 0.005]) < 2 and len(df1n[abs(df1n['rolled_temp']) < 0.005]) > 10:
+                if len(df1n[abs(df1n['rolled_temp']) < 0.005]) / len(df1n) > 0.9:
+                    self.df.loc[self.df['type'] == 1, 'flag_mud'] = 3
+                    return
+
+                df1_flagged = df1n[abs(df1n['rolled_temp']) < 0.005]
+                df1_no_flag = df1[df1.index > df1_flagged.index[-1] + 1]
+                df2_comp = df2[df2['PRESSURE'] < df1_no_flag['PRESSURE'].max()]
+
+                inter_point = 0
+                for (idx_down, row_down), (idx_up, row_up) in zip(df2_comp[::-1].iterrows(), df1_no_flag.iterrows()):
+                    if row_down['TEMPERATURE'] <= row_up['TEMPERATURE']:
+                        inter_point = idx_up
+                        break
+
+                self.df.loc[(self.df.index < inter_point) & (self.df.index >= df1.index.min()), 'flag_mud'] = 3
+
+        self.df = self.df.drop(columns=['TEMP_diff'])
+
 
     def parse_segments(self):
         self.df['DATETIME'] = pd.to_datetime(self.df['DATETIME'])
@@ -432,8 +469,9 @@ class QC(object):
 
         lim_pressure = self.df[~self.df['direction']].iloc[0], self.df[self.df['direction']].iloc[-1]
 
-        self.df.loc[:lim_pressure[0].name - 1, 'type'] = 2
-        self.df.loc[lim_pressure[1].name + 1:, 'type'] = 1
+        if self.sensor_type != 'Lowell':
+            self.df.loc[:lim_pressure[0].name - 1, 'type'] = 2
+            self.df.loc[lim_pressure[1].name + 1:, 'type'] = 1
 
         if nodown:
             self.df.loc[self.df['type'] == 2, 'type'] = 3
