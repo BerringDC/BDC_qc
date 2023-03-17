@@ -336,13 +336,13 @@ This test needs to find a balance between setting a threshold too low, triggerin
 
 #### Mud test
 
-This test is applied only in the Up segment. Controls whether the temperature sensor has some mud biasing the measurements once hauled. Values are rolled by 10 measurements and flags observation if rolled temperature is lower than 0.005ºC.	Action: Values that fail the test should be flagged as bad data (4).
+This test is applied only in the Up segment. Controls whether the temperature sensor has some mud biasing the measurements once hauled. Values are rolled by 10 measurements and observations are flagged if rolled temperature is lower than 0.005ºC.	Action: Values that fail the test should be flagged as bad data (4).
 
 <div align="center">
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Measurement is barely invariant <br> Rolled temperature: 0.005 °C_ |
+| Fail (4) | _Measurement is invariant <br> Rolled temperature < 0.005 °C_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 <sub> Table 13. Mud flags. </sub>
