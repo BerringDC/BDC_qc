@@ -342,7 +342,7 @@ This test is applied only in the Up segment. Controls whether the temperature se
 
 | **Flags** | **Description** |
 | :---: | :---: |
-| Fail (4) | _Measurement is invariant <br> Rolled temperature < 0.005 °C_ |
+| Fail (4) | _Invariant measurement <br> Rolled temperature < 0.005 °C_ |
 | Pass (1) | _Applies for test pass condition._ |
 
 <sub> Table 13. Mud flags. </sub>
