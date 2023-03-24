@@ -120,16 +120,17 @@ class QC(object):
         self.df.loc[(globe.is_land(self.df['LATITUDE'], self.df['LONGITUDE'])), ['flag_land', 'flag']] = 4
 
     # 7. Impossible speed test
-    # Drift speeds calculated given the positions and times of the floats, can't exceed 3m/s
+    # Drift speeds calculated given the positions and times of the floats, can't exceed 4.12m/s
 
     def impossible_speed(self):
         self.df['flag_speed'] = 1
-        self.df['speed'] = 0
+        if 'SPEED' not in self.df.columns:
+            self.df['SPEED'] = 0
         self.df.reset_index(drop=True, inplace=True)
         if len(self.df) != 0:
-            self.df.loc[(self.df['speed'] > 4.12), ['flag_speed', 'flag']] = 4
+            self.df.loc[(self.df['SPEED'] > 4.12), ['flag_speed', 'flag']] = 4
             # self.df = self.df[self.df['flag_speed'] == 1]
-            self.df = self.df.drop(columns=['speed'])
+            self.df = self.df.drop(columns=['SPEED'])
 
     # 8. Global range test
     # Gross filter on the observed values of pressure, temperature and salinity
@@ -399,82 +400,98 @@ class QC(object):
 
         self.df = self.df.drop(columns=['TEMP_diff'])
 
-
     def parse_segments(self):
         self.df['DATETIME'] = pd.to_datetime(self.df['DATETIME'])
-        self.df['DATEINT'] = (self.df['DATETIME'] - self.df['DATETIME'].min())
-        self.df['DATEINT'] = self.df.apply(lambda row: row['DATEINT'].total_seconds(), axis=1)
-        self.df['PRESSURE'] = self.df['PRESSURE'].astype(float)
-        self.df['GAP_PRESSURE'] = abs(self.df['PRESSURE'] - self.df['PRESSURE'].quantile(0.9))
+        if 'Moana' in self.sensor_type:
+            self.df = self.df.reset_index(drop=True)
+            self.df['gap'] = (self.df['DATETIME'] - self.df['DATETIME'].shift(1)).dt.total_seconds()
+            fishing = self.df[
+                (self.df['gap'] > 180) & (self.df['PRESSURE'] > self.df['PRESSURE'].max() / 2)]
+            self.df['type'] = 3
+            if len(fishing) == 0:
+                idx = self.df[self.df['PRESSURE'] == self.df['PRESSURE'].max()].index[0]
+                self.df.loc[:idx + 1, 'type'] = 2
+                self.df.loc[idx + 1:, 'type'] = 1
+            else:
+                idx1, idx2 = fishing.index[0], fishing.index[-1]
+                self.df.loc[:idx1 - 1, 'type'] = 2
+                self.df.loc[idx2 - 1:, 'type'] = 1
+        else:
+            self.df['DATEINT'] = (self.df['DATETIME'] - self.df['DATETIME'].min())
+            self.df['DATEINT'] = self.df.apply(lambda row: row['DATEINT'].total_seconds(), axis=1)
+            self.df['PRESSURE'] = self.df['PRESSURE'].astype(float)
+            self.df['GAP_PRESSURE'] = abs(self.df['PRESSURE'] - self.df['PRESSURE'].quantile(0.9))
 
-        self.df['delta_time'] = self.df['DATETIME'].diff(periods=-1) / pd.offsets.Second(1)
-        self.df['vel'] = self.df['PRESSURE'].diff(periods=-1) / self.df['delta_time'] * 1000
-        self.df['vel_smooth'] = self.df['vel'].rolling(7, center=True, min_periods=1).mean()
+            self.df['delta_time'] = self.df['DATETIME'].diff(periods=-1) / pd.offsets.Second(1)
+            self.df['vel'] = self.df['PRESSURE'].diff(periods=-1) / self.df['delta_time'] * 1000
+            self.df['vel_smooth'] = self.df['vel'].rolling(7, center=True, min_periods=1).mean()
 
-        self.df['type'] = 3
+            self.df['type'] = 3
 
-        # True down and False up
-        self.df['direction'] = self.df['PRESSURE'].shift(1) < self.df['PRESSURE']
-        self.df['dir'] = self.df['direction'].rolling(10, center=True, min_periods=1).mean()
+            # True down and False up
+            self.df['direction'] = self.df['PRESSURE'].shift(1) < self.df['PRESSURE']
+            self.df['dir'] = self.df['direction'].rolling(10, center=True, min_periods=1).mean()
 
-        # Direction and pressure
-        self.df.loc[(self.df['dir'] > 0.5) & (self.df['GAP_PRESSURE'] > 0.5 * self.df['GAP_PRESSURE'].max()), 'dir'] = 1
-        self.df.loc[(self.df['dir'] < 0.5) & (self.df['GAP_PRESSURE'] > 0.5 * self.df['GAP_PRESSURE'].max()), 'dir'] = 0
+            # Direction and pressure
+            self.df.loc[
+                (self.df['dir'] > 0.5) & (self.df['GAP_PRESSURE'] > 0.5 * self.df['GAP_PRESSURE'].max()), 'dir'] = 1
+            self.df.loc[
+                (self.df['dir'] < 0.5) & (self.df['GAP_PRESSURE'] > 0.5 * self.df['GAP_PRESSURE'].max()), 'dir'] = 0
 
-        self.df.loc[
-            (self.df['dir'] == 1) & (self.df['GAP_PRESSURE'] > 0.5 * self.df['GAP_PRESSURE'].max()), 'direction'] = True
-        self.df.loc[(self.df['dir'] == 0) & (
+            self.df.loc[
+                (self.df['dir'] == 1) & (
+                            self.df['GAP_PRESSURE'] > 0.5 * self.df['GAP_PRESSURE'].max()), 'direction'] = True
+            self.df.loc[(self.df['dir'] == 0) & (
                     self.df['GAP_PRESSURE'] > 0.5 * self.df['GAP_PRESSURE'].max()), 'direction'] = False
 
-        std_bottom = self.df[(self.df['DATETIME'] > self.df['DATETIME'].quantile(0.1)) & (
+            std_bottom = self.df[(self.df['DATETIME'] > self.df['DATETIME'].quantile(0.1)) & (
                     self.df['DATETIME'] < self.df['DATETIME'].quantile(0.9))]['PRESSURE'].std()
 
-        nodown, noup = False, False
-        if std_bottom < 0.2:
-            # Smooth size to find the inflection point
-            min_seg_size = 1
-            max_down_pressure = self.df['PRESSURE'].iloc[:min_seg_size].max()
-            while max_down_pressure < 0.9 * self.df['PRESSURE'].max():
-                min_seg_size += 1
+            nodown, noup = False, False
+            if std_bottom < 0.2:
+                # Smooth size to find the inflection point
+                min_seg_size = 1
                 max_down_pressure = self.df['PRESSURE'].iloc[:min_seg_size].max()
+                while max_down_pressure < 0.9 * self.df['PRESSURE'].max():
+                    min_seg_size += 1
+                    max_down_pressure = self.df['PRESSURE'].iloc[:min_seg_size].max()
 
-            if min_seg_size == 1:
-                nodown = True
+                if min_seg_size == 1:
+                    nodown = True
 
-            min_seg_size = 1
-            max_up_pressure = self.df['PRESSURE'].iloc[-min_seg_size:].max()
-            while max_up_pressure < 0.9 * self.df['PRESSURE'].max():
-                min_seg_size += 1
+                min_seg_size = 1
                 max_up_pressure = self.df['PRESSURE'].iloc[-min_seg_size:].max()
+                while max_up_pressure < 0.9 * self.df['PRESSURE'].max():
+                    min_seg_size += 1
+                    max_up_pressure = self.df['PRESSURE'].iloc[-min_seg_size:].max()
 
-            if min_seg_size == 1:
-                noup = True
+                if min_seg_size == 1:
+                    noup = True
 
-        else:
-            # Smooth size to find the inflection point
-            min_seg_size = 1
-            max_down_pressure = self.df['PRESSURE'].iloc[:min_seg_size].max()
-            while max_down_pressure < 0.5 * self.df['PRESSURE'].max():
-                min_seg_size += 1
+            else:
+                # Smooth size to find the inflection point
+                min_seg_size = 1
                 max_down_pressure = self.df['PRESSURE'].iloc[:min_seg_size].max()
+                while max_down_pressure < 0.5 * self.df['PRESSURE'].max():
+                    min_seg_size += 1
+                    max_down_pressure = self.df['PRESSURE'].iloc[:min_seg_size].max()
 
-            min_seg_size = 1
-            max_up_pressure = self.df['PRESSURE'].iloc[-min_seg_size:].max()
-            while max_up_pressure < 0.5 * self.df['PRESSURE'].max():
-                min_seg_size += 1
+                min_seg_size = 1
                 max_up_pressure = self.df['PRESSURE'].iloc[-min_seg_size:].max()
+                while max_up_pressure < 0.5 * self.df['PRESSURE'].max():
+                    min_seg_size += 1
+                    max_up_pressure = self.df['PRESSURE'].iloc[-min_seg_size:].max()
 
-        self.df.loc[:min_seg_size, 'direction'] = True
-        self.df.loc[len(self.df) - min_seg_size:, 'direction'] = False
+            self.df.loc[:min_seg_size, 'direction'] = True
+            self.df.loc[len(self.df) - min_seg_size:, 'direction'] = False
 
-        lim_pressure = self.df[~self.df['direction']].iloc[0], self.df[self.df['direction']].iloc[-1]
+            lim_pressure = self.df[~self.df['direction']].iloc[0], self.df[self.df['direction']].iloc[-1]
 
-        if self.sensor_type != 'Lowell':
             self.df.loc[:lim_pressure[0].name - 1, 'type'] = 2
             self.df.loc[lim_pressure[1].name + 1:, 'type'] = 1
 
-        if nodown:
-            self.df.loc[self.df['type'] == 2, 'type'] = 3
+            if nodown:
+                self.df.loc[self.df['type'] == 2, 'type'] = 3
 
-        if noup:
-            self.df.loc[self.df['type'] == 1, 'type'] = 3
+            if noup:
+                self.df.loc[self.df['type'] == 1, 'type'] = 3
