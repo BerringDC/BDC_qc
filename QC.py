@@ -239,7 +239,10 @@ class QC(object):
                                  self.df['type'] != 3)), ['flag_sal_stuck', 'flag']] = 4
             self.df = self.df.drop(columns=['prev_sal_1', 'post_sal_1', 'prev_sal_2', 'post_sal_2'])
 
-        self.df = self.df.drop(columns=['vel', 'vel_smooth', 'delta_time', 'type'])
+        try:
+            self.df = self.df.drop(columns=['vel', 'vel_smooth', 'delta_time', 'type'])
+        except:
+            pass
 
     # 12. Rate of change test
     # Excessive rise/fall test.
